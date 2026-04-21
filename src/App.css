@@ -1,0 +1,280 @@
+/* ── Theme variables ─────────────────────────────────────── */
+:root {
+  --bg:         #06090f;
+  --card:       #0d1825;
+  --border:     #1e3a5c;
+  --bright:     #ddeeff;
+  --label:      #7fb3d3;
+  --dim:        #3d5a72;
+  --input-bg:   #d8e8f8;
+  --input-fg:   #0d1a2e;
+  --input-gold: #8a5000;
+  --header-bg:  #ddeeff;
+  --header-fg:  #06090f;
+  --uncommon:   #2ecc82;
+  --rare:       #4da6ff;
+  --epic:       #c455ff;
+}
+
+html[data-theme="light"] {
+  --bg:         #f0f2f5;
+  --card:       #ffffff;
+  --border:     #cccccc;
+  --bright:     #111111;
+  --label:      #444444;
+  --dim:        #888888;
+  --input-bg:   #ffffff;
+  --input-fg:   #111111;
+  --input-gold: #8a5000;
+  --header-bg:  #1a2d45;
+  --header-fg:  #ffffff;
+  --uncommon:   #1a9e5c;
+  --rare:       #2277cc;
+  --epic:       #9933cc;
+}
+
+/* ── Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--bright);
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── App shell ───────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── Top bar ─────────────────────────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 8px;
+  flex-shrink: 0;
+}
+
+.app-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--bright);
+  letter-spacing: 1px;
+}
+
+.top-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.top-controls select {
+  background: var(--card);
+  color: var(--bright);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── Divider ─────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 14px;
+  flex-shrink: 0;
+}
+
+/* ── Tabs ────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  padding: 8px 12px 0;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  padding: 6px 18px;
+  background: var(--card);
+  color: var(--label);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.tab-btn.active {
+  color: var(--bright);
+  border-bottom: 2px solid var(--rare);
+  background: var(--card);
+}
+
+.tab-content {
+  flex: 1;
+  overflow: auto;
+  padding: 10px 12px;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card-wrapper {
+  margin-bottom: 6px;
+}
+
+.card-header {
+  background: var(--header-bg);
+  color: var(--header-fg);
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px 10px;
+  letter-spacing: 0.5px;
+}
+
+.card-body {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 8px 10px 10px;
+}
+
+/* ── Form elements ───────────────────────────────────────── */
+.info-text {
+  color: var(--label);
+  font-size: 11px;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.field-label {
+  display: block;
+  color: var(--bright);
+  font-size: 11px;
+  margin-bottom: 3px;
+  margin-top: 4px;
+}
+
+.power-input,
+.select-input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  padding: 7px 8px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  margin-bottom: 2px;
+}
+
+.power-input {
+  color: var(--input-gold);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.select-input {
+  color: var(--input-fg);
+  cursor: pointer;
+}
+
+/* ── Result ──────────────────────────────────────────────── */
+.result-label {
+  color: var(--label);
+  font-size: 11px;
+  text-align: center;
+  padding: 10px 0 4px;
+}
+
+.result-value {
+  font-size: 34px;
+  font-weight: bold;
+  text-align: center;
+  padding: 2px 0 10px;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+
+.formula-text {
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--bright);
+  padding: 8px 0 4px;
+  white-space: pre-wrap;
+  line-height: 1.9;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.stfc-btn {
+  background: var(--card);
+  color: var(--bright);
+  border: 1px solid var(--border);
+  padding: 7px 16px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.15s;
+}
+
+.stfc-btn:hover:not(:disabled) { background: var(--border); }
+.stfc-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.stfc-btn.saved { color: var(--uncommon); border-color: var(--uncommon); }
+
+/* ── Calculator layout ───────────────────────────────────── */
+.calc-layout {
+  display: flex;
+  gap: 12px;
+  min-height: 100%;
+}
+
+.calc-left {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.calc-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── History ─────────────────────────────────────────────── */
+.saves-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.saves-table th {
+  background: var(--bg);
+  color: var(--bright);
+  padding: 7px 8px;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border);
+}
+
+.saves-table td {
+  padding: 6px 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  color: var(--bright);
+  cursor: pointer;
+}
+
+.saves-table tbody tr:hover td { background: rgba(30, 58, 92, 0.4); }
+.saves-table tbody tr.row-selected td { background: var(--border); }
