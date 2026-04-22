@@ -1,39 +1,51 @@
 import { useState, useEffect } from "react";
-import Calculator from "./components/Calculator";
 import History from "./components/History";
+import FederationTab  from "./factions/federation/FederationTab";
+import KlingonTab     from "./factions/klingon/KlingonTab";
+import RomulanTab     from "./factions/romulan/RomulanTab";
+import CardassianTab  from "./factions/cardassian/CardassianTab";
+import BorgTab        from "./factions/borg/BorgTab";
+import DominionTab    from "./factions/dominion/DominionTab";
+import EclipseTab     from "./factions/eclipse/EclipseTab";
 import { LANGS } from "./languages";
-import type { Theme, Lang, SaveEntry } from "./data";
+import type { Theme, Lang, SaveEntry } from "./factions/shared/types";
 import "./App.css";
 
+type OuterTab  = "calc" | "saves";
+type FactionTab = "Federation" | "Klingon" | "Romulan" | "Cardassian" | "Borg" | "Dominion" | "Eclipse";
+
+const FACTION_TABS: FactionTab[] = ["Federation", "Klingon", "Romulan", "Cardassian", "Borg", "Dominion", "Eclipse"];
+
+function migrateEntry(raw: unknown): SaveEntry {
+  const r = raw as Record<string, unknown>;
+  if (typeof r.faction === "string") return r as unknown as SaveEntry;
+  return {
+    date:    String(r.date ?? ""),
+    faction: "Legacy",
+    power:   Number(r.power ?? 0),
+    result:  Number(r.result ?? 0),
+    label:   [r.armada, r.crew, r.research].filter(Boolean).join(" · ") || "–",
+  };
+}
+
 export default function App() {
-  // useState ist wie @State in SwiftUI / remember { mutableStateOf() } in Compose
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem("theme") as Theme) ?? "dark"
-  );
-  const [lang, setLang] = useState<Lang>(
-    () => (localStorage.getItem("lang") as Lang) ?? "de"
-  );
-  const [tab, setTab] = useState(0);
-  const [saves, setSaves] = useState<SaveEntry[]>(
-    () => JSON.parse(localStorage.getItem("saves") ?? "[]")
-  );
+  const [theme, setTheme]           = useState<Theme>(() => (localStorage.getItem("theme") as Theme) ?? "dark");
+  const [lang, setLang]             = useState<Lang>(() => (localStorage.getItem("lang") as Lang) ?? "de");
+  const [outerTab, setOuterTab]     = useState<OuterTab>("calc");
+  const [factionTab, setFactionTab] = useState<FactionTab>("Federation");
+  const [saves, setSaves]           = useState<SaveEntry[]>(() => {
+    const raw = JSON.parse(localStorage.getItem("saves") ?? "[]");
+    return (raw as unknown[]).map(migrateEntry);
+  });
 
   const t = LANGS[lang];
 
-  // useEffect läuft wenn sich `theme` ändert – setzt data-theme auf <html>
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  function changeTheme(newTheme: Theme) {
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  }
-
-  function changeLang(newLang: Lang) {
-    setLang(newLang);
-    localStorage.setItem("lang", newLang);
-  }
+  function changeTheme(v: Theme) { setTheme(v); localStorage.setItem("theme", v); }
+  function changeLang(v: Lang)   { setLang(v);  localStorage.setItem("lang", v);  }
 
   function addSave(entry: SaveEntry) {
     const updated = [...saves, entry];
@@ -41,8 +53,8 @@ export default function App() {
     localStorage.setItem("saves", JSON.stringify(updated));
   }
 
-  function deleteSave(index: number) {
-    const updated = saves.filter((_, i) => i !== index);
+  function deleteSave(i: number) {
+    const updated = saves.filter((_, idx) => idx !== i);
     setSaves(updated);
     localStorage.setItem("saves", JSON.stringify(updated));
   }
@@ -71,20 +83,57 @@ export default function App() {
 
       <div className="divider" />
 
-      {/* Tab Bar */}
+      {/* Outer Tabs */}
       <div className="tab-bar">
-        <button className={`tab-btn${tab === 0 ? " active" : ""}`} onClick={() => setTab(0)}>
+        <button className={`tab-btn${outerTab === "calc"  ? " active" : ""}`} onClick={() => setOuterTab("calc")}>
           {t.tab_calc}
         </button>
-        <button className={`tab-btn${tab === 1 ? " active" : ""}`} onClick={() => setTab(1)}>
+        <button className={`tab-btn${outerTab === "saves" ? " active" : ""}`} onClick={() => setOuterTab("saves")}>
           {t.tab_saves}
         </button>
       </div>
 
-      {/* Tab Inhalt */}
+      {/* Faction Sub-Tabs (only in calc view) */}
+      {outerTab === "calc" && (
+        <div className="faction-tab-bar">
+          {FACTION_TABS.map((f) => (
+            <button
+              key={f}
+              className={`faction-tab-btn faction-${f.toLowerCase()}${factionTab === f ? " active" : ""}`}
+              onClick={() => setFactionTab(f)}
+            >
+              {f.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Content */}
       <div className="tab-content">
-        {tab === 0 && <Calculator t={t} onSave={addSave} />}
-        {tab === 1 && <History t={t} saves={saves} onDelete={deleteSave} onClearAll={clearSaves} />}
+        {outerTab === "saves" && (
+          <History t={t} saves={saves} onDelete={deleteSave} onClearAll={clearSaves} />
+        )}
+        {outerTab === "calc" && factionTab === "Federation" && (
+          <FederationTab lang={lang} t={t} onSave={addSave} />
+        )}
+        {outerTab === "calc" && factionTab === "Klingon" && (
+          <KlingonTab lang={lang} t={t} onSave={addSave} />
+        )}
+        {outerTab === "calc" && factionTab === "Romulan" && (
+          <RomulanTab lang={lang} t={t} onSave={addSave} />
+        )}
+        {outerTab === "calc" && factionTab === "Cardassian" && (
+          <CardassianTab lang={lang} t={t} onSave={addSave} />
+        )}
+        {outerTab === "calc" && factionTab === "Borg" && (
+          <BorgTab lang={lang} t={t} onSave={addSave} />
+        )}
+        {outerTab === "calc" && factionTab === "Dominion" && (
+          <DominionTab lang={lang} t={t} onSave={addSave} />
+        )}
+        {outerTab === "calc" && factionTab === "Eclipse" && (
+          <EclipseTab lang={lang} t={t} onSave={addSave} />
+        )}
       </div>
     </div>
   );
