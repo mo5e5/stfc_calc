@@ -8,7 +8,7 @@ import {
   fmtPower,
   parsePower,
 } from "../data";
-import type { ArmadaKey, CrewKey, ResKey, SaveEntry } from "../data";
+import type { ArmadaKey, CalcResult, CrewKey, ResKey, SaveEntry } from "../data";
 import type { Translation } from "../languages";
 
 interface Props {
@@ -26,7 +26,7 @@ export default function Calculator({ t, onSave }: Props) {
   // Berechnung direkt aus State – kein useEffect nötig
   // (React rendert neu wenn State sich ändert, result wird neu berechnet)
   let power: number | null = null;
-  let result = null;
+  let result: CalcResult | null = null;
   if (powerInput.trim()) {
     try {
       power = parsePower(powerInput);
