@@ -1,18 +1,18 @@
 import { useState } from "react";
 import Card from "./Card";
-import { fmtPower } from "../data";
-import type { SaveEntry } from "../data";
+import { fmtPower } from "../factions/shared/utils";
+import type { SaveEntry } from "../factions/shared/types";
 import type { Translation } from "../languages";
 
 interface Props {
-  t: Translation;
-  saves: SaveEntry[];
-  onDelete: (index: number) => void;
+  t:          Translation;
+  saves:      SaveEntry[];
+  onDelete:   (index: number) => void;
   onClearAll: () => void;
 }
 
 export default function History({ t, saves, onDelete, onClearAll }: Props) {
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected]   = useState<number | null>(null);
   const [confirming, setConfirming] = useState(false);
 
   function handleRowClick(i: number) {
@@ -26,28 +26,21 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
   }
 
   function handleClearAll() {
-    if (!confirming) {
-      setConfirming(true);
-      return;
-    }
+    if (!confirming) { setConfirming(true); return; }
     onClearAll();
     setSelected(null);
-    setConfirming(false);
-  }
-
-  function handleCancelClear() {
     setConfirming(false);
   }
 
   function exportCSV() {
     if (!saves.length) return;
     const rows = saves.map(
-      (e) => `${e.date};${e.power};${e.armada};${e.crew};${e.research};${e.result}`
+      (e) => `${e.date};${e.faction};${e.power};${e.label};${e.result}`
     );
     const csv = [t.saves_cols.join(";"), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
     a.href = url;
     a.download = "stfc_results.csv";
     a.click();
@@ -60,16 +53,12 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
         <p className="info-text">{t.saves_info}</p>
         <table className="saves-table">
           <thead>
-            <tr>
-              {t.saves_cols.map((col) => (
-                <th key={col}>{col}</th>
-              ))}
-            </tr>
+            <tr>{t.saves_cols.map((col) => <th key={col}>{col}</th>)}</tr>
           </thead>
           <tbody>
             {saves.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ padding: "20px", color: "var(--dim)" }}>
+                <td colSpan={5} style={{ padding: "20px", color: "var(--dim)" }}>
                   {t.msg_no_entries}
                 </td>
               </tr>
@@ -81,10 +70,9 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
                   onClick={() => handleRowClick(i)}
                 >
                   <td>{e.date}</td>
+                  <td style={{ color: `var(--${e.faction.toLowerCase()})` }}>{e.faction}</td>
                   <td>{fmtPower(e.power)}</td>
-                  <td>{e.armada}</td>
-                  <td>{e.crew}</td>
-                  <td>{e.research}</td>
+                  <td style={{ color: "var(--label)", fontSize: "10px" }}>{e.label}</td>
                   <td>{fmtPower(e.result)}</td>
                 </tr>
               ))
@@ -103,7 +91,7 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
         {confirming ? (
           <>
             <button className="stfc-btn saved" onClick={handleClearAll}>✔ Ja, alles löschen</button>
-            <button className="stfc-btn" onClick={handleCancelClear}>✖ Abbrechen</button>
+            <button className="stfc-btn" onClick={() => setConfirming(false)}>✖ Abbrechen</button>
           </>
         ) : (
           <button className="stfc-btn" onClick={handleClearAll} disabled={!saves.length}>

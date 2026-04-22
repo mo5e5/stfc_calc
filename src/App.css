@@ -14,6 +14,16 @@
   --uncommon:   #2ecc82;
   --rare:       #4da6ff;
   --epic:       #c455ff;
+
+  /* Faction colors */
+  --federation:  #4da6ff;
+  --klingon:     #e03040;
+  --romulan:     #2ecc82;
+  --cardassian:  #d4a017;
+  --borg:        #00ffaa;
+  --dominion:    #a855f7;
+  --eclipse:     #ff6b35;
+  --legacy:      #7fb3d3;
 }
 
 html[data-theme="light"] {
@@ -31,6 +41,16 @@ html[data-theme="light"] {
   --uncommon:   #1a9e5c;
   --rare:       #2277cc;
   --epic:       #9933cc;
+
+  /* Faction colors (light) */
+  --federation:  #1a6bbf;
+  --klingon:     #b02030;
+  --romulan:     #1a8c55;
+  --cardassian:  #9a7010;
+  --borg:        #008855;
+  --dominion:    #7c3aed;
+  --eclipse:     #cc4a15;
+  --legacy:      #555555;
 }
 
 /* ── Reset ───────────────────────────────────────────────── */
@@ -278,3 +298,58 @@ body {
 
 .saves-table tbody tr:hover td { background: rgba(30, 58, 92, 0.4); }
 .saves-table tbody tr.row-selected td { background: var(--border); }
+
+/* ── Faction Sub-Tabs ────────────────────────────────────── */
+.faction-tab-bar {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px 0;
+  gap: 2px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.faction-tab-bar::-webkit-scrollbar { display: none; }
+
+.faction-tab-btn {
+  padding: 4px 14px;
+  background: transparent;
+  color: var(--dim);
+  border: 1px solid transparent;
+  border-bottom: none;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.faction-tab-btn:hover { color: var(--bright); }
+
+.faction-tab-btn.active {
+  color: var(--bright);
+  border-color: var(--border);
+  background: var(--card);
+}
+
+/* Active underline per faction */
+.faction-tab-btn.faction-federation.active { border-bottom: 2px solid var(--federation); }
+.faction-tab-btn.faction-klingon.active    { border-bottom: 2px solid var(--klingon);    }
+.faction-tab-btn.faction-romulan.active    { border-bottom: 2px solid var(--romulan);    }
+.faction-tab-btn.faction-cardassian.active { border-bottom: 2px solid var(--cardassian); }
+.faction-tab-btn.faction-borg.active       { border-bottom: 2px solid var(--borg);       }
+.faction-tab-btn.faction-dominion.active   { border-bottom: 2px solid var(--dominion);   }
+.faction-tab-btn.faction-eclipse.active    { border-bottom: 2px solid var(--eclipse);    }
+
+.faction-tab-soon {
+  font-size: 10px;
+  color: var(--dim);
+  padding: 4px 10px;
+  white-space: nowrap;
+  opacity: 0.5;
+  letter-spacing: 0.3px;
+}
