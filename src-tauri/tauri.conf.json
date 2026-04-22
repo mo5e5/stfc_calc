@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "stfc_calc_tauri",
+  "productName": "STFC Calc",
   "version": "0.1.0",
-  "identifier": "com.malteoppermann.stfc_calc_tauri",
+  "identifier": "com.malteoppermann.stfc-calc",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",

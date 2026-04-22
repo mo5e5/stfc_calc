@@ -13,6 +13,7 @@ interface Props {
 
 export default function History({ t, saves, onDelete, onClearAll }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [confirming, setConfirming] = useState(false);
 
   function handleRowClick(i: number) {
     setSelected(i === selected ? null : i);
@@ -25,9 +26,17 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
   }
 
   function handleClearAll() {
-    if (!confirm(t.msg_clear_all_confirm)) return;
+    if (!confirming) {
+      setConfirming(true);
+      return;
+    }
     onClearAll();
     setSelected(null);
+    setConfirming(false);
+  }
+
+  function handleCancelClear() {
+    setConfirming(false);
   }
 
   function exportCSV() {
@@ -91,9 +100,16 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
         <button className="stfc-btn" onClick={handleDelete} disabled={selected === null}>
           {t.btn_delete}
         </button>
-        <button className="stfc-btn" onClick={handleClearAll} disabled={!saves.length}>
-          {t.btn_clear_all}
-        </button>
+        {confirming ? (
+          <>
+            <button className="stfc-btn saved" onClick={handleClearAll}>✔ Ja, alles löschen</button>
+            <button className="stfc-btn" onClick={handleCancelClear}>✖ Abbrechen</button>
+          </>
+        ) : (
+          <button className="stfc-btn" onClick={handleClearAll} disabled={!saves.length}>
+            {t.btn_clear_all}
+          </button>
+        )}
       </div>
     </div>
   );
