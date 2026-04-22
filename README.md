@@ -21,11 +21,11 @@ STFC has no official in-game calculator. Battle outcome depends heavily on crew,
 Max. Armada = Your Power × Armada Factor × Crew Factor × Research Factor
 ```
 
-| Armada Type | Factor | Crew (Optimal / Standard / Weak) | Research (High / Base) |
-|---|---|---|---|
-| Uncommon (green) | × 3.0 | × 1.2 / × 1.0 / × 0.8 | × 1.1 / × 1.0 |
-| Rare (blue) | × 1.8 | | |
-| Epic (purple) | × 1.1 | | |
+| Armada Type      | Factor | Crew (Optimal / Standard / Weak) | Research (High / Base) |
+| ---------------- | ------ | -------------------------------- | ---------------------- |
+| Uncommon (green) | × 3.0  | × 1.2 / × 1.0 / × 0.8            | × 1.1 / × 1.0          |
+| Rare (blue)      | × 1.8  |                                  |                        |
+| Epic (purple)    | × 1.1  |                                  |                        |
 
 Sources: [1](https://www.reddit.com/r/startrekfleetcommand/comments/148hy52/armada_strength_ratios/) [2](https://www.youtube.com/watch?v=Ygh5tD7Ik38&t=49) [3](https://www.youtube.com/watch?v=0HOWcSZnOGs) [4](https://www.youtube.com/watch?v=OfM8ZgP6IVE&t=5) [5](https://www.reddit.com/r/startrekfleetcommand/comments/dw2xx9/whats_the_minimum_ship_strength_required_for/) [6](https://www.reddit.com/r/startrekfleetcommand/comments/18uu5bd/armada_tips_and_guide_for_newbies/)
 
@@ -44,6 +44,7 @@ Sources: [1](https://www.reddit.com/r/startrekfleetcommand/comments/148hy52/arma
 **If you get "App is damaged" error:**
 
 Open Terminal and run:
+
 ```bash
 xattr -cr "/Applications/STFC Calc.app"
 ```
@@ -74,6 +75,7 @@ npm run tauri build    # Build release binaries
 ```
 
 After `npm run tauri build`, find your app in `src-tauri/target/release/bundle/`:
+
 - **macOS**: `STFC Calc.app` (run `xattr -cr` if needed)
 - **Windows**: `STFC Calc.msi`
 
