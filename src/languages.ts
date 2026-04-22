@@ -49,7 +49,8 @@ export const LANGS: Record<"de" | "en", Translation> = {
     tab_calc: "◆  Berechnung",
     tab_saves: "◈  Verlauf",
     power_title: "SCHIFFSSTÄRKE",
-    power_info: "Deine gesamte Flottenstärke (alle teilnehmenden Schiffe summiert).",
+    power_info:
+      "Deine gesamte Flottenstärke (alle teilnehmenden Schiffe summiert).",
     power_label: "Stärke eingeben  (z. B. 2.000.000)",
     armada_title: "ARMADA-TYP",
     armada_info: "Welche Armada wollt ihr angreifen?",
@@ -73,10 +74,17 @@ export const LANGS: Record<"de" | "en", Translation> = {
     tips_optimal: "✅ Optimale Einstellungen!",
     warn_title: "⚠  HINWEISE",
     warn_text:
-      "• 100-Runden-Limit: Nicht gewonnen = Niederlage.\n\n• One-Shot: Schiff zu klein = sofort vernichtet.\n\n• Solo: Kein Allianz-Schadensbonus.",
+      "• 100-Runden-Limit: Nicht gewonnen = Niederlage.\n\n• One-Shot: Schiff zu klein = sofort vernichtet.\n\n• Solo: Kein Allianz-Schadensbonus.\n\n⚠️ Dieses Ergebnis ist ein Richtwert. Tatsächliche Siege hängen stark von Crew & Forschung ab. Keine Garantie auf Sieg!",
     saves_title: "GESPEICHERTE BERECHNUNGEN",
     saves_info: "Alle gespeicherten Kalkulationen – exportierbar als CSV.",
-    saves_cols: ["Datum", "Stärke", "Armada", "Crew", "Forschung", "Max. Armada"],
+    saves_cols: [
+      "Datum",
+      "Stärke",
+      "Armada",
+      "Crew",
+      "Forschung",
+      "Max. Armada",
+    ],
     btn_export: "📤  CSV EXPORTIEREN",
     btn_delete: "✖  AUSWAHL LÖSCHEN",
     btn_clear_all: "🗑  ALLES LÖSCHEN",
@@ -85,13 +93,13 @@ export const LANGS: Record<"de" | "en", Translation> = {
     msg_clear_all_confirm: "Wirklich alle Einträge löschen?",
     armada_options: {
       Uncommon: "Uncommon  (grün)  ×3.0",
-      Rare:     "Rare  (blau)  ×1.8",
-      Epic:     "Epic  (lila)  ×1.1",
+      Rare: "Rare  (blau)  ×1.8",
+      Epic: "Epic  (lila)  ×1.1",
     },
     crew_options: {
-      Optimal:  "Optimal  (Sisko, Kirk/Spock …)  ×1.2",
+      Optimal: "Optimal  (Strong & Best in Slot)  ×1.2",
       Standard: "Standard  (normale Kampf-Crew)  ×1.0",
-      Weak:     "Schwach  (falsche / keine Crew)  ×0.8",
+      Weak: "Schwach  (falsche / keine Crew)  ×0.8",
     },
     res_options: {
       High: "Hoch  (weit ausgebaut)  ×1.1",
@@ -127,7 +135,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     tips_optimal: "✅ Optimal settings!",
     warn_title: "⚠  NOTES",
     warn_text:
-      "• 100-Round Limit: Not won = Defeat.\n\n• One-Shot: Ship too small = instantly destroyed.\n\n• Solo: No alliance damage bonus.",
+      "• 100-Round Limit: Not won = Defeat.\n\n• One-Shot: Ship too small = instantly destroyed.\n\n• Solo: No alliance damage bonus.\n\n⚠️ This result is an estimate. Actual victory depends heavily on crew & research. No guarantee of success!",
     saves_title: "SAVED CALCULATIONS",
     saves_info: "All saved calculations – exportable as CSV.",
     saves_cols: ["Date", "Power", "Armada", "Crew", "Research", "Max Armada"],
@@ -139,13 +147,13 @@ export const LANGS: Record<"de" | "en", Translation> = {
     msg_clear_all_confirm: "Really delete all entries?",
     armada_options: {
       Uncommon: "Uncommon  (green)  ×3.0",
-      Rare:     "Rare  (blue)  ×1.8",
-      Epic:     "Epic  (purple)  ×1.1",
+      Rare: "Rare  (blue)  ×1.8",
+      Epic: "Epic  (purple)  ×1.1",
     },
     crew_options: {
-      Optimal:  "Optimal  (Sisko, Kirk/Spock …)  ×1.2",
+      Optimal: "Optimal  (Strong & Best in Slot)  ×1.2",
       Standard: "Standard  (normal combat crew)  ×1.0",
-      Weak:     "Weak  (wrong / no crew)  ×0.8",
+      Weak: "Weak  (wrong / no crew)  ×0.8",
     },
     res_options: {
       High: "High  (well researched)  ×1.1",
