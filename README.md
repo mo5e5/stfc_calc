@@ -127,7 +127,12 @@ These apply across all faction calculators:
 
 > All values are community estimates based on observed results. Actual outcomes depend on many in-game variables. No guarantee of success.
 
-**Sources:** [1](https://stfc.johnwsiskar.com/federation-romulan-klingon-armadas/) [2](https://reds0004.github.io/stfc_armada_guide/armada_pages/cardassian.html) [3](https://stfc.johnwsiskar.com/borg-armadas/) [4](https://stfc.johnwsiskar.com/solo-armadas/) [5](https://reds0004.github.io/stfc_armada_guide/armada_pages/eclipse.html)
+**Sources & References:**
+1. [Federation/Romulan/Klingon Armadas](https://stfc.johnwsiskar.com/federation-romulan-klingon-armadas/)
+2. [Cardassian Armada Guide](https://reds0004.github.io/stfc_armada_guide/armada_pages/cardassian.html)
+3. [Borg Armadas](https://stfc.johnwsiskar.com/borg-armadas/)
+4. [Solo Armadas (Dominion)](https://stfc.johnwsiskar.com/solo-armadas/)
+5. [Eclipse Armada Guide](https://reds0004.github.io/stfc_armada_guide/armada_pages/eclipse.html)
 
 ---
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateEclipse } from "./calc";
 import type { SpockTier, HullBreachKey } from "./calc";
 import { strings } from "./strings";
@@ -24,7 +25,6 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
   const [research, setResearch]     = useState<ResKey>("High");
   const [spockTier, setSpockTier]   = useState<SpockTier>(0);
   const [hullBreach, setHullBreach] = useState<HullBreachKey>("yes");
-  const [justSaved, setJustSaved]   = useState(false);
 
   let power:  number | null = null;
   let result: ReturnType<typeof calculateEclipse> | null = null;
@@ -35,6 +35,15 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
       result = calculateEclipse(power, difficulty, crew, research, spockTier, hullBreach);
     } catch { /* invalid */ }
   }
+
+  const label = `${difficulty} · Spock T${spockTier} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`;
+  const { handleSave, justSaved } = useSaveHandler({
+    faction: "Eclipse",
+    power,
+    resultValue: result?.maxArmadaPower ?? null,
+    label,
+    onSave,
+  });
 
   const tips = result
     ? [
@@ -47,19 +56,6 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         result.research < 1.1 && t.tips_research,
       ].filter(Boolean).join("\n\n") || t.tips_optimal
     : t.tips_start;
-
-  function handleSave() {
-    if (!power || !result) return;
-    onSave({
-      date:    new Date().toLocaleString("de-DE"),
-      faction: "Eclipse",
-      power,
-      result:  result.maxArmadaPower,
-      label:   `${difficulty} · Spock T${spockTier} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`,
-    });
-    setJustSaved(true);
-    setTimeout(() => setJustSaved(false), 1800);
-  }
 
   function handleClear() {
     setPowerInput("");

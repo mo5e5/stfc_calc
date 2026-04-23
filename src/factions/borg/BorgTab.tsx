@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateBorg } from "./calc";
 import type { BorgTarget, BorgCrewKey } from "./calc";
 import { strings } from "./strings";
@@ -24,7 +25,6 @@ export default function BorgTab({ lang, t, onSave }: Props) {
   const [borgCrew, setBorgCrew]     = useState<BorgCrewKey>("BorgSynergy");
   const [crew, setCrew]             = useState<CrewKey>("Optimal");
   const [research, setResearch]     = useState<ResKey>("High");
-  const [justSaved, setJustSaved]   = useState(false);
 
   let power:  number | null = null;
   let result: ReturnType<typeof calculateBorg> | null = null;
@@ -36,6 +36,15 @@ export default function BorgTab({ lang, t, onSave }: Props) {
     } catch { /* invalid */ }
   }
 
+  const label = `${target} · ${borgCrew} · ${crew}`;
+  const { handleSave, justSaved } = useSaveHandler({
+    faction: "Borg",
+    power,
+    resultValue: result?.maxArmadaPower ?? null,
+    label,
+    onSave,
+  });
+
   const tips = result
     ? [
         target === "Sphere"   && s.tip_sphere,
@@ -46,19 +55,6 @@ export default function BorgTab({ lang, t, onSave }: Props) {
         result.research < 1.1  && t.tips_research,
       ].filter(Boolean).join("\n\n") || t.tips_optimal
     : t.tips_start;
-
-  function handleSave() {
-    if (!power || !result) return;
-    onSave({
-      date:    new Date().toLocaleString("de-DE"),
-      faction: "Borg",
-      power,
-      result:  result.maxArmadaPower,
-      label:   `${target} · ${borgCrew} · ${crew}`,
-    });
-    setJustSaved(true);
-    setTimeout(() => setJustSaved(false), 1800);
-  }
 
   function handleClear() {
     setPowerInput("");
