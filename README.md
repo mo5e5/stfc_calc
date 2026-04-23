@@ -9,7 +9,7 @@
 A native desktop app that estimates which armada strength your fleet can defeat.  
 Built with **Tauri · React · TypeScript** — runs natively on macOS and Windows.
 
-[![Release](https://img.shields.io/badge/release-1.0.1-4da6ff?style=flat-square)](../../releases/latest)
+[![Release](https://img.shields.io/badge/release-1.0.3-4da6ff?style=flat-square)](../../releases/latest)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-brightgreen?style=flat-square)](../../releases/latest)
 [![License](https://img.shields.io/github/license/mo5e5/stfc_calc?style=flat-square&color=blue)](LICENSE)
 
