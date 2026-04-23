@@ -13,7 +13,7 @@ interface Props {
   onSave: (entry: SaveEntry) => void;
 }
 
-const SPOCK_TIERS: SpockTier[] = [3, 4, 5];
+const SPOCK_TIERS: SpockTier[] = [0, 3, 4, 5];
 
 export default function EclipseTab({ lang, t, onSave }: Props) {
   const s = strings[lang];
@@ -22,7 +22,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
   const [difficulty, setDifficulty] = useState<Difficulty>("Uncommon");
   const [crew, setCrew]             = useState<CrewKey>("Optimal");
   const [research, setResearch]     = useState<ResKey>("High");
-  const [spockTier, setSpockTier]   = useState<SpockTier>(5);
+  const [spockTier, setSpockTier]   = useState<SpockTier>(0);
   const [hullBreach, setHullBreach] = useState<HullBreachKey>("yes");
   const [justSaved, setJustSaved]   = useState(false);
 
@@ -38,6 +38,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
 
   const tips = result
     ? [
+        spockTier === 0 && s.tip_no_spock,
         spockTier === 5 && s.tip_spock5,
         spockTier === 4 && s.tip_spock4,
         spockTier === 3 && s.tip_spock3,
@@ -65,7 +66,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
     setDifficulty("Uncommon");
     setCrew("Optimal");
     setResearch("High");
-    setSpockTier(5);
+    setSpockTier(0);
     setHullBreach("yes");
   }
 
