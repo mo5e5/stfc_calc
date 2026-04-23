@@ -98,12 +98,12 @@ Max Armada = (Ship 1 + Ship 2 + Ship 3) × Difficulty × Research × Defiant
 
 Long fights — shield regeneration determines survival duration.
 
-| Spock Setup | Shield regen per round | Survivability |
-| --- | --- | --- |
-| No Spock | — | Very low (×0.8) |
-| Tier 3 | 100% of crew defense | Low |
-| Tier 4 | 400% of crew defense | Medium |
-| Tier 5 | 750% of crew defense | High |
+| Spock Setup | Shield regen per round | Survivability   |
+| ----------- | ---------------------- | --------------- |
+| No Spock    | —                      | Very low (×0.8) |
+| Tier 3      | 100% of crew defense   | Low             |
+| Tier 4      | 400% of crew defense   | Medium          |
+| Tier 5      | 750% of crew defense   | High            |
 
 Hull Breach (Stella crew) adds **+50% crit damage after all other bonuses**.
 
