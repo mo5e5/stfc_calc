@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import { useSaveHandler } from "./useSaveHandler";
 import {
   DIFFICULTY_FACTORS,
   CREW_FACTORS,
@@ -26,7 +27,6 @@ export default function StandardFactionCalc({ config, strings, t, onSave }: Prop
   const [shipType, setShipType]     = useState<ShipType>(COUNTER_SHIP[config.armadaType]);
   const [crew, setCrew]             = useState<CrewKey>("Optimal");
   const [research, setResearch]     = useState<ResKey>("High");
-  const [justSaved, setJustSaved]   = useState(false);
 
   let power:  number | null = null;
   let result: { value: number; b: number; c: number; r: number; s: number; status: string } | null = null;
@@ -42,20 +42,16 @@ export default function StandardFactionCalc({ config, strings, t, onSave }: Prop
     } catch { /* ungültige Eingabe */ }
   }
 
-  const resultColor = result ? `var(--${config.key.toLowerCase()})` : "var(--bright)";
+  const label = `${difficulty} · ${crew} · ${research} · ${shipType}`;
+  const { handleSave, justSaved } = useSaveHandler({
+    faction: config.key,
+    power,
+    resultValue: result?.value ?? null,
+    label,
+    onSave,
+  });
 
-  function handleSave() {
-    if (!power || !result) return;
-    onSave({
-      date:    new Date().toLocaleString("de-DE"),
-      faction: config.key,
-      power,
-      result:  result.value,
-      label:   `${difficulty} · ${crew} · ${research} · ${shipType}`,
-    });
-    setJustSaved(true);
-    setTimeout(() => setJustSaved(false), 1800);
-  }
+  const resultColor = result ? `var(--${config.key.toLowerCase()})` : "var(--bright)";
 
   function handleClear() {
     setPowerInput("");

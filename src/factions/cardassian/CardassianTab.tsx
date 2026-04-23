@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateCardassian, critChanceAtRound, GAILA_REDUCTION } from "./calc";
 import type { GailaKey } from "./calc";
 import { strings } from "./strings";
@@ -21,7 +22,6 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
   const [crew, setCrew]             = useState<CrewKey>("Optimal");
   const [research, setResearch]     = useState<ResKey>("High");
   const [gaila, setGaila]           = useState<GailaKey>("GailaSynergy");
-  const [justSaved, setJustSaved]   = useState(false);
 
   let power:  number | null = null;
   let result: ReturnType<typeof calculateCardassian> | null = null;
@@ -33,6 +33,15 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
     } catch { /* invalid */ }
   }
 
+  const label = `${difficulty} · ${crew} · ${gaila}`;
+  const { handleSave, justSaved } = useSaveHandler({
+    faction: "Cardassian",
+    power,
+    resultValue: result?.maxArmadaPower ?? null,
+    label,
+    onSave,
+  });
+
   const tips = result
     ? [
         difficulty === "Uncommon" && s.tip_uncommon,
@@ -43,19 +52,6 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
         result.research < 1.1     && t.tips_research,
       ].filter(Boolean).join("\n\n") || t.tips_optimal
     : t.tips_start;
-
-  function handleSave() {
-    if (!power || !result) return;
-    onSave({
-      date:    new Date().toLocaleString("de-DE"),
-      faction: "Cardassian",
-      power,
-      result:  result.maxArmadaPower,
-      label:   `${difficulty} · ${crew} · ${gaila}`,
-    });
-    setJustSaved(true);
-    setTimeout(() => setJustSaved(false), 1800);
-  }
 
   function handleClear() {
     setPowerInput("");

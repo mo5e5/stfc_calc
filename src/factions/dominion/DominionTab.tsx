@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateDominion } from "./calc";
 import type { ShipSetup } from "./calc";
 import { strings } from "./strings";
@@ -29,7 +30,6 @@ export default function DominionTab({ lang, t, onSave }: Props) {
   const [difficulty, setDifficulty] = useState<Difficulty>("Uncommon");
   const [research, setResearch]     = useState<ResKey>("High");
   const [hasDefiant, setHasDefiant] = useState(true);
-  const [justSaved, setJustSaved]   = useState(false);
 
   function parseShip(input: { power: string; crew: CrewKey }): ShipSetup | null {
     try { return { power: parsePower(input.power), crew: input.crew }; }
@@ -45,6 +45,15 @@ export default function DominionTab({ lang, t, onSave }: Props) {
     ? calculateDominion(s1, s2, s3, difficulty, research, hasDefiant)
     : null;
 
+  const label = `${difficulty} · ${hasDefiant ? "Defiant" : "No Defiant"} · ${research}`;
+  const { handleSave, justSaved } = useSaveHandler({
+    faction: "Dominion",
+    power: result?.totalPower ?? null,
+    resultValue: result?.maxArmadaPower ?? null,
+    label,
+    onSave,
+  });
+
   const tips = result
     ? [
         hasDefiant               && s.tip_defiant,
@@ -53,19 +62,6 @@ export default function DominionTab({ lang, t, onSave }: Props) {
         result.research < 1.1   && t.tips_research,
       ].filter(Boolean).join("\n\n")
     : t.tips_start;
-
-  function handleSave() {
-    if (!result) return;
-    onSave({
-      date:    new Date().toLocaleString("de-DE"),
-      faction: "Dominion",
-      power:   result.totalPower,
-      result:  result.maxArmadaPower,
-      label:   `${difficulty} · ${hasDefiant ? "Defiant" : "No Defiant"} · ${research}`,
-    });
-    setJustSaved(true);
-    setTimeout(() => setJustSaved(false), 1800);
-  }
 
   function handleClear() {
     [ship1, ship2, ship3].forEach((sh) => { sh.setPower(""); sh.setCrew("Optimal"); });
