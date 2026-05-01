@@ -4,13 +4,25 @@ import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateEclipse } from "./calc";
 import type { SpockTier, HullBreachKey } from "./calc";
 import { strings } from "./strings";
-import { DIFFICULTY_FACTORS, CREW_FACTORS, RESEARCH_FACTORS, fmtPower, parsePower } from "../shared/utils";
-import type { Difficulty, CrewKey, ResKey, Lang, SaveEntry } from "../shared/types";
+import {
+  DIFFICULTY_FACTORS,
+  CREW_FACTORS,
+  RESEARCH_FACTORS,
+  fmtPower,
+  parsePower,
+} from "../shared/utils";
+import type {
+  Difficulty,
+  CrewKey,
+  ResKey,
+  Lang,
+  SaveEntry,
+} from "../shared/types";
 import type { Translation } from "../../languages";
 
 interface Props {
-  lang:   Lang;
-  t:      Translation;
+  lang: Lang;
+  t: Translation;
   onSave: (entry: SaveEntry) => void;
 }
 
@@ -21,22 +33,33 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
 
   const [powerInput, setPowerInput] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>("Uncommon");
-  const [crew, setCrew]             = useState<CrewKey>("Optimal");
-  const [research, setResearch]     = useState<ResKey>("High");
-  const [spockTier, setSpockTier]   = useState<SpockTier>(0);
+  const [armadaLevel, setArmadaLevel] = useState(1);
+  const [crew, setCrew] = useState<CrewKey>("Optimal");
+  const [research, setResearch] = useState<ResKey>("High");
+  const [spockTier, setSpockTier] = useState<SpockTier>(0);
   const [hullBreach, setHullBreach] = useState<HullBreachKey>("yes");
 
-  let power:  number | null = null;
+  let power: number | null = null;
   let result: ReturnType<typeof calculateEclipse> | null = null;
 
   if (powerInput.trim()) {
     try {
-      power  = parsePower(powerInput);
-      result = calculateEclipse(power, difficulty, crew, research, spockTier, hullBreach);
-    } catch { /* invalid */ }
+      power = parsePower(powerInput);
+      result = calculateEclipse(
+        power,
+        difficulty,
+        crew,
+        research,
+        spockTier,
+        hullBreach,
+        armadaLevel,
+      );
+    } catch {
+      /* invalid */
+    }
   }
 
-  const label = `${difficulty} · Spock T${spockTier} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`;
+  const label = `${difficulty} · Level ${armadaLevel} · Spock T${spockTier} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`;
   const { handleSave, justSaved } = useSaveHandler({
     faction: "Eclipse",
     power,
@@ -52,14 +75,17 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         spockTier === 4 && s.tip_spock4,
         spockTier === 3 && s.tip_spock3,
         hullBreach === "yes" && s.tip_hull,
-        result.crew < 1.2    && t.tips_crew,
+        result.crew < 1.2 && t.tips_crew,
         result.research < 1.1 && t.tips_research,
-      ].filter(Boolean).join("\n\n") || t.tips_optimal
+      ]
+        .filter(Boolean)
+        .join("\n\n") || t.tips_optimal
     : t.tips_start;
 
   function handleClear() {
     setPowerInput("");
     setDifficulty("Uncommon");
+    setArmadaLevel(1);
     setCrew("Optimal");
     setResearch("High");
     setSpockTier(0);
@@ -84,19 +110,46 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         <Card title={t.difficulty_title}>
           <p className="info-text">{s.armada_info}</p>
           <label className="field-label">{t.difficulty_label}</label>
-          <select className="select-input" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
+          <select
+            className="select-input"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+          >
             {(Object.keys(DIFFICULTY_FACTORS) as Difficulty[]).map((k) => (
-              <option key={k} value={k}>{t.difficulty_options[k]}</option>
+              <option key={k} value={k}>
+                {t.difficulty_options[k]}
+              </option>
             ))}
           </select>
+        </Card>
+
+        <Card title={s.armada_level_label}>
+          <p className="info-text">{s.armada_level_info}</p>
+          <label className="field-label">{s.armada_level_label}:</label>
+          <input
+            type="number"
+            className="power-input"
+            value={armadaLevel}
+            onChange={(e) =>
+              setArmadaLevel(Math.max(1, parseInt(e.target.value) || 1))
+            }
+            min="1"
+            max="99"
+          />
         </Card>
 
         <Card title={s.spock_label}>
           <p className="info-text">{s.spock_info}</p>
           <label className="field-label">{s.spock_label}:</label>
-          <select className="select-input" value={spockTier} onChange={(e) => setSpockTier(Number(e.target.value) as SpockTier)}>
+          <select
+            className="select-input"
+            value={spockTier}
+            onChange={(e) => setSpockTier(Number(e.target.value) as SpockTier)}
+          >
             {SPOCK_TIERS.map((tier) => (
-              <option key={tier} value={tier}>{s.spock_options[tier]}</option>
+              <option key={tier} value={tier}>
+                {s.spock_options[tier]}
+              </option>
             ))}
           </select>
         </Card>
@@ -104,9 +157,15 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         <Card title={s.hull_breach_label}>
           <p className="info-text">{s.hull_breach_info}</p>
           <label className="field-label">{s.hull_breach_label}:</label>
-          <select className="select-input" value={hullBreach} onChange={(e) => setHullBreach(e.target.value as HullBreachKey)}>
+          <select
+            className="select-input"
+            value={hullBreach}
+            onChange={(e) => setHullBreach(e.target.value as HullBreachKey)}
+          >
             {(["yes", "no"] as HullBreachKey[]).map((k) => (
-              <option key={k} value={k}>{s.hull_breach_options[k]}</option>
+              <option key={k} value={k}>
+                {s.hull_breach_options[k]}
+              </option>
             ))}
           </select>
         </Card>
@@ -114,9 +173,15 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         <Card title={t.crew_title}>
           <p className="info-text">{t.crew_info}</p>
           <label className="field-label">{t.crew_label}</label>
-          <select className="select-input" value={crew} onChange={(e) => setCrew(e.target.value as CrewKey)}>
+          <select
+            className="select-input"
+            value={crew}
+            onChange={(e) => setCrew(e.target.value as CrewKey)}
+          >
             {(Object.keys(CREW_FACTORS) as CrewKey[]).map((k) => (
-              <option key={k} value={k}>{t.crew_options[k]}</option>
+              <option key={k} value={k}>
+                {t.crew_options[k]}
+              </option>
             ))}
           </select>
         </Card>
@@ -124,9 +189,15 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         <Card title={t.res_title}>
           <p className="info-text">{t.res_info}</p>
           <label className="field-label">{t.res_label}</label>
-          <select className="select-input" value={research} onChange={(e) => setResearch(e.target.value as ResKey)}>
+          <select
+            className="select-input"
+            value={research}
+            onChange={(e) => setResearch(e.target.value as ResKey)}
+          >
             {(Object.keys(RESEARCH_FACTORS) as ResKey[]).map((k) => (
-              <option key={k} value={k}>{t.res_options[k]}</option>
+              <option key={k} value={k}>
+                {t.res_options[k]}
+              </option>
             ))}
           </select>
         </Card>
@@ -135,7 +206,10 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
       <div className="calc-right">
         <Card title={t.result_title}>
           <p className="result-label">{t.result_label}</p>
-          <p className="result-value" style={{ color: result ? "var(--eclipse)" : "var(--bright)" }}>
+          <p
+            className="result-value"
+            style={{ color: result ? "var(--eclipse)" : "var(--bright)" }}
+          >
             {result ? fmtPower(result.maxArmadaPower) : "–"}
           </p>
           <div className="divider" />
@@ -154,18 +228,28 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         </Card>
 
         <div className="btn-row">
-          <button className={`stfc-btn${justSaved ? " saved" : ""}`} onClick={handleSave} disabled={!result}>
+          <button
+            className={`stfc-btn${justSaved ? " saved" : ""}`}
+            onClick={handleSave}
+            disabled={!result}
+          >
             {justSaved ? t.msg_saved : t.btn_calc}
           </button>
-          <button className="stfc-btn" onClick={handleClear}>{t.btn_clear}</button>
+          <button className="stfc-btn" onClick={handleClear}>
+            {t.btn_clear}
+          </button>
         </div>
 
         <Card title={t.tips_title}>
-          <p className="info-text" style={{ whiteSpace: "pre-line" }}>{tips}</p>
+          <p className="info-text" style={{ whiteSpace: "pre-line" }}>
+            {tips}
+          </p>
         </Card>
 
         <Card title={t.warn_title}>
-          <p className="info-text" style={{ whiteSpace: "pre-line" }}>{t.warn_text}</p>
+          <p className="info-text" style={{ whiteSpace: "pre-line" }}>
+            {t.warn_text}
+          </p>
         </Card>
       </div>
     </div>
