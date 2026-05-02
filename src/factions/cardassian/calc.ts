@@ -12,10 +12,11 @@ export interface CardassianResult {
 }
 
 // Gaila reduces critical damage — key crew choice for Cardassian
-export const GAILA_REDUCTION: Record<"none" | "Gaila" | "GailaSynergy", number> = {
-  none:        0,
-  Gaila:       50,
-  GailaSynergy: 110,
+export const GAILA_REDUCTION: Record<"none" | "Gaila" | "GailaSynergy" | "LeaderSynergy", number> = {
+  none:          0,
+  Gaila:         50,
+  GailaSynergy:  110,
+  LeaderSynergy: 120,  // armada leader runs Pike/Moreau/Gaila or Picard/Beverly/Gaila → all ships inherit
 };
 
 export type GailaKey = keyof typeof GAILA_REDUCTION;
@@ -28,7 +29,7 @@ const BASE_FACTORS: Record<Difficulty, number> = {
 
 // Critical damage multiplier the armada deals, per difficulty
 const CRIT_DAMAGE: Record<Difficulty, number> = {
-  Uncommon: 250, // escalating — starting value
+  Uncommon: 300,
   Rare:     375,
   Epic:     450,
 };
