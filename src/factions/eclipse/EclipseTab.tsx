@@ -26,7 +26,7 @@ interface Props {
   onSave: (entry: SaveEntry) => void;
 }
 
-const SPOCK_TIERS: SpockTier[] = [0, 3, 4, 5];
+const SPOCK_TIERS: SpockTier[] = [0, "beverly", 3, 4, 5];
 
 export default function EclipseTab({ lang, t, onSave }: Props) {
   const s = strings[lang];
@@ -38,6 +38,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
   const [research, setResearch] = useState<ResKey>("High");
   const [spockTier, setSpockTier] = useState<SpockTier>(0);
   const [hullBreach, setHullBreach] = useState<HullBreachKey>("yes");
+  const [defenseStat, setDefenseStat] = useState(0);
 
   let power: number | null = null;
   let result: ReturnType<typeof calculateEclipse> | null = null;
@@ -53,13 +54,15 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         spockTier,
         hullBreach,
         armadaLevel,
+        defenseStat,
       );
     } catch {
       /* invalid */
     }
   }
 
-  const label = `${difficulty} · Level ${armadaLevel} · Spock T${spockTier} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`;
+  const tierLabel = spockTier === "beverly" ? "Beverly" : `Spock T${spockTier}`;
+  const label = `${difficulty} · Level ${armadaLevel} · ${tierLabel} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`;
   const { handleSave, justSaved } = useSaveHandler({
     faction: "Eclipse",
     power,
@@ -74,6 +77,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
         spockTier === 5 && s.tip_spock5,
         spockTier === 4 && s.tip_spock4,
         spockTier === 3 && s.tip_spock3,
+        spockTier === "beverly" && s.tip_beverly,
         hullBreach === "yes" && s.tip_hull,
         result.crew < 1.2 && t.tips_crew,
         result.research < 1.1 && t.tips_research,
@@ -90,6 +94,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
     setResearch("High");
     setSpockTier(0);
     setHullBreach("yes");
+    setDefenseStat(0);
   }
 
   return (
@@ -144,7 +149,10 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
           <select
             className="select-input"
             value={spockTier}
-            onChange={(e) => setSpockTier(Number(e.target.value) as SpockTier)}
+            onChange={(e) => {
+              const v = e.target.value;
+              setSpockTier(v === "beverly" ? "beverly" : (Number(v) as SpockTier));
+            }}
           >
             {SPOCK_TIERS.map((tier) => (
               <option key={tier} value={tier}>
@@ -152,6 +160,21 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
               </option>
             ))}
           </select>
+        </Card>
+
+        <Card title={s.defense_label}>
+          <p className="info-text">{s.defense_info}</p>
+          <label className="field-label">{s.defense_label}:</label>
+          <input
+            type="number"
+            className="power-input"
+            value={defenseStat || ""}
+            onChange={(e) =>
+              setDefenseStat(Math.max(0, parseInt(e.target.value) || 0))
+            }
+            min="0"
+            placeholder="0"
+          />
         </Card>
 
         <Card title={s.hull_breach_label}>
@@ -219,7 +242,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
                   `${fmtPower(power)}  ×  ${DIFFICULTY_FACTORS[difficulty]}  ×  ${result.crew}  ×  ${result.research}`,
                   `= ${fmtPower(result.maxArmadaPower)}`,
                   "",
-                  `${s.label_shield_regen}  ${result.shieldRegenPct}%`,
+                  `${s.label_shield_regen}  ${result.shieldRegenPct}%${result.actualShieldRegenHp > 0 ? `  (${s.label_regen_hp} ${result.actualShieldRegenHp.toLocaleString("de-DE")})` : ""}`,
                   `Hull Breach:  ${result.hullBreach ? "+50% Crit (nach Boni)" : "–"}`,
                   `Überlebensdauer:  ${result.survivability}`,
                 ].join("\n")
