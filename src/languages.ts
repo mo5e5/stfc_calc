@@ -67,7 +67,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     power_label: "Stärke eingeben  (z. B. 2.000.000)",
 
     difficulty_title: "SCHWIERIGKEIT",
-    difficulty_info:  "Welche Armada-Stufe wollt ihr angreifen?",
+    difficulty_info:  "Farb-Badge auf dem Armada-Node im Spiel: Grün = Uncommon, Blau = Rare, Lila = Epic.",
     difficulty_label: "Schwierigkeit auswählen:",
     difficulty_options: {
       Uncommon: "Uncommon  (grün)  ×3.0",
@@ -84,7 +84,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     },
 
     crew_title:   "CREW-QUALITÄT",
-    crew_info:    "Welche Offiziere sind auf deinem Schiff?",
+    crew_info:    "Optimal = Synergie-Crew (beste Offiziere für diesen Armada-Typ). Standard = gute Kampf-Crew ohne Synergien. Schwach = falsche oder keine Crew.",
     crew_label:   "Crew-Qualität auswählen:",
     crew_options: {
       Optimal:  "Optimal  (Strong & Best in Slot)  ×1.2",
@@ -93,7 +93,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     },
 
     res_title:   "FORSCHUNGSSTAND",
-    res_info:    "Armada-Forschung in den Bäumen Station & Kampf.",
+    res_info:    "Armada-Forschung (Bäume Station & Kampf). Hoch = relevante Armada-Forschungen weitgehend abgeschlossen.",
     res_label:   "Forschungsstand auswählen:",
     res_options: {
       High: "Hoch  (weit ausgebaut)  ×1.1",
@@ -139,7 +139,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     power_label: "Enter power  (e.g. 2,000,000)",
 
     difficulty_title: "DIFFICULTY",
-    difficulty_info:  "Which armada tier do you want to attack?",
+    difficulty_info:  "Color badge on the armada node in-game: Green = Uncommon, Blue = Rare, Purple = Epic.",
     difficulty_label: "Select difficulty:",
     difficulty_options: {
       Uncommon: "Uncommon  (green)  ×3.0",
@@ -156,7 +156,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     },
 
     crew_title:   "CREW QUALITY",
-    crew_info:    "Which officers are on your ship?",
+    crew_info:    "Optimal = synergy crew (best officers for this armada type). Standard = good combat crew without synergies. Weak = wrong or no crew.",
     crew_label:   "Select crew quality:",
     crew_options: {
       Optimal:  "Optimal  (Strong & Best in Slot)  ×1.2",
@@ -165,7 +165,7 @@ export const LANGS: Record<"de" | "en", Translation> = {
     },
 
     res_title:   "RESEARCH LEVEL",
-    res_info:    "Armada research in the Station & Combat trees.",
+    res_info:    "Armada research (Station & Combat trees). High = relevant armada research largely completed.",
     res_label:   "Select research level:",
     res_options: {
       High: "High  (well researched)  ×1.1",
