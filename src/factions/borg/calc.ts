@@ -9,11 +9,11 @@ export type BorgCrewKey = "BorgSynergy" | "Optimal" | "Standard";
 const BORG_MITIGATION_FACTOR: Record<BorgTarget, number> = {
   Sphere:   1.8,
   Cube:     1.2,
-  MegaCube: 0.7,  // Extremely hard — only viable with full Borg crew synergy
+  MegaCube: 0.7,  // 30% crit chance, 400% crit damage (source: stfc.johnwsiskar.com/borg-armadas). BorgSynergy crew entirely removes crit chance via Nine/Seven/Eight of Eleven synergy.
 };
 
 const BORG_CREW_FACTOR: Record<BorgCrewKey, number> = {
-  BorgSynergy: 1.35,  // Nine/Seven/Five of Eleven — full synergy crits negate MegaCube crits
+  BorgSynergy: 1.35,  // Nine/Seven/Eight of Eleven — full synergy crits negate MegaCube crits
   Optimal:     1.0,
   Standard:    0.75,
 };
