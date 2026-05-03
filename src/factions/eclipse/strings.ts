@@ -31,7 +31,7 @@ export const strings: Record<Lang, EclipseStrings> = {
       "Eclipse-Armadas sind sehr langwierig — Shield-Regeneration ist entscheidend. Spock (mit Kelvin-Kirk) regeneriert Schilde jede Runde.",
     armada_level_label: "ARMADA-LEVEL",
     armada_level_info:
-      "Eclipse-Armada-Level bestimmt die Stärke. Höhere Level sind exponentiell schwärer (verdoppelt sich pro Level).",
+      "Interne Schwierigkeitsstufe (1 = leichteste bekannte Armada). Stärke verdoppelt sich ungefähr pro Stufe (Community-Schätzung, empirisch kalibriert). Mittlere Exchange Armadas → Wert 4.",
     spock_label: "REGEN-CREW",
     spock_info:
       "Spock (mit Kelvin-Kirk) regeneriert Schilde als % der Crew-Verteidigung pro Runde. Beverly (Rare) als Captain: 200% Crew-Health Shield-Regen, kein Morale nötig.",
@@ -72,7 +72,7 @@ export const strings: Record<Lang, EclipseStrings> = {
       "Eclipse armadas are very long fights — shield regeneration is critical. Spock (with Kelvin Kirk) regenerates shields each round.",
     armada_level_label: "ARMADA LEVEL",
     armada_level_info:
-      "Eclipse armada level determines strength. Higher levels are exponentially harder (doubles per level).",
+      "Internal difficulty scale (1 = lightest known armada). Strength approximately doubles per level (community estimate, empirically calibrated). Mid-range Exchange Armadas → value 4.",
     spock_label: "REGEN CREW",
     spock_info:
       "Spock (with Kelvin Kirk) regenerates shields as % of crew defense per round. Beverly (Rare) as captain: 200% crew health shield regen, no morale required.",

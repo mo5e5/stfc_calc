@@ -27,9 +27,9 @@ export const strings: Record<Lang, BorgStrings> = {
       MegaCube: "MegaCube  (Extrem schwer)",
     },
     borg_crew_label:  "BORG-CREW",
-    borg_crew_info:   "Borg-Offiziere haben spezielle Synergien gegen Borg-Ziele.",
+    borg_crew_info:   "Borg-Offiziere (Nine/Seven/Eight of Eleven) aus Borg-Armada-Belohnungen. Sie haben spezielle Synergien gegen Borg-Ziele.",
     borg_crew_options: {
-      BorgSynergy: "Volle Synergie  (Nine/Seven/Five of Eleven)  ×1.35",
+      BorgSynergy: "Volle Synergie  (Nine/Seven/Eight of Eleven)  ×1.35",
       Optimal:     "Optimale Nicht-Borg-Crew  ×1.0",
       Standard:    "Standard-Crew  ×0.75",
     },
@@ -38,9 +38,9 @@ export const strings: Record<Lang, BorgStrings> = {
     tip_cube:
       "🔵 Cube: Koordination wichtig. Stärkste Crew auf dem Hauptschiff.",
     tip_megacube:
-      "🔴 MegaCube: Nur mit voller Borg-Synergie!\nNine/Seven/Five of Eleven → Crit-Schaden des MegaCubes = 0.",
+      "🔴 MegaCube: Nur mit voller Borg-Synergie!\nNine/Seven/Eight of Eleven → Crit-Schaden des MegaCubes = 0.",
     tip_no_synergy:
-      "⚠️ MegaCube ohne Borg-Synergie ist extrem schwierig!\nNine of Eleven + Seven of Eleven + weiterer Borg-Offizier empfohlen.",
+      "⚠️ MegaCube ohne Borg-Synergie ist extrem schwierig!\nSynergy-Schiff: Nine of Eleven (c) + Seven of Eleven + Eight of Eleven → Crit-Schaden = 0.",
   },
   en: {
     tab_label:    "BORG",
@@ -53,9 +53,9 @@ export const strings: Record<Lang, BorgStrings> = {
       MegaCube: "MegaCube  (extremely hard)",
     },
     borg_crew_label:  "BORG CREW",
-    borg_crew_info:   "Borg officers have special synergies against Borg targets.",
+    borg_crew_info:   "Borg officers (Nine/Seven/Eight of Eleven) are obtained from Borg armada rewards. They have special synergies against Borg targets.",
     borg_crew_options: {
-      BorgSynergy: "Full Synergy  (Nine/Seven/Five of Eleven)  ×1.35",
+      BorgSynergy: "Full Synergy  (Nine/Seven/Eight of Eleven)  ×1.35",
       Optimal:     "Optimal non-Borg crew  ×1.0",
       Standard:    "Standard crew  ×0.75",
     },
@@ -64,8 +64,8 @@ export const strings: Record<Lang, BorgStrings> = {
     tip_cube:
       "🔵 Cube: Coordination matters. Best crew on the lead ship.",
     tip_megacube:
-      "🔴 MegaCube: Full Borg synergy only!\nNine/Seven/Five of Eleven → MegaCube crit damage = 0.",
+      "🔴 MegaCube: Full Borg synergy only!\nNine/Seven/Eight of Eleven → MegaCube crit damage = 0.",
     tip_no_synergy:
-      "⚠️ MegaCube without Borg synergy is extremely difficult!\nNine of Eleven + Seven of Eleven + another Borg officer recommended.",
+      "⚠️ MegaCube without Borg synergy is extremely difficult!\nSynergy ship: Nine of Eleven (c) + Seven of Eleven + Eight of Eleven → crit damage = 0.",
   },
 };
