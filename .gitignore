@@ -4,6 +4,7 @@ Thumbs.db
 
 # Cowork-Briefing
 CLAUDE.md
+.claude
 
 # Node / Tauri
 node_modules/
