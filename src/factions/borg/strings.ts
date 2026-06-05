@@ -2,7 +2,7 @@ import type { Lang } from "../shared/types";
 import type { BorgTarget, BorgCrewKey } from "./calc";
 
 export interface BorgStrings {
-  tab_label:        string;
+  target_title:     string;
   armada_info:      string;
   target_label:     string;
   target_options:   Record<BorgTarget, string>;
@@ -17,7 +17,7 @@ export interface BorgStrings {
 
 export const strings: Record<Lang, BorgStrings> = {
   de: {
-    tab_label:    "BORG",
+    target_title: "BORG-ZIEL",
     armada_info:
       "Borg-Armadas haben extrem hohe Mitigation. Eigene Mitigation + Crits sind entscheidend. Borg-Crew-Synergie negiert MegaCube-Crits vollständig.",
     target_label:  "Borg-Ziel auswählen:",
@@ -43,7 +43,7 @@ export const strings: Record<Lang, BorgStrings> = {
       "⚠️ MegaCube ohne Borg-Synergie ist extrem schwierig!\nSynergy-Schiff: Nine of Eleven (c) + Seven of Eleven + Eight of Eleven → Crit-Schaden = 0.",
   },
   en: {
-    tab_label:    "BORG",
+    target_title: "BORG TARGET",
     armada_info:
       "Borg armadas have extremely high mitigation. Your own mitigation + crits are key. Borg crew synergy fully negates MegaCube crits.",
     target_label:  "Select Borg target:",

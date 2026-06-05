@@ -29,8 +29,8 @@ describe("calculateDominion", () => {
     expect(r.maxArmadaPower).toBe(Math.round(total * 1.8));
   });
 
-  it("defiantly flag reflects hasDefiant input", () => {
+  it("hasDefiant flag reflects hasDefiant input", () => {
     const r = calculateDominion(ship(1_000_000), ship(1_000_000), ship(1_000_000), "Uncommon", "High", true);
-    expect(r.defiantly).toBe(true);
+    expect(r.hasDefiant).toBe(true);
   });
 });

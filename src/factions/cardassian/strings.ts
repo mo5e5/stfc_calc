@@ -1,7 +1,6 @@
 import type { Lang } from "../shared/types";
 
 export interface CardassianStrings {
-  tab_label:       string;
   armada_info:     string;
   gaila_label:     string;
   gaila_info:      string;
@@ -15,7 +14,6 @@ export interface CardassianStrings {
 
 export const strings: Record<Lang, CardassianStrings> = {
   de: {
-    tab_label:   "CARDASSIAN",
     armada_info:
       "Cardassian-Armadas steigern ihre Crit-Chance jede Runde (Uncommon). Rare & Epic haben festen Crit, aber massiven Crit-Schaden.",
     gaila_label: "GAILA-EINSATZ",
@@ -37,7 +35,6 @@ export const strings: Record<Lang, CardassianStrings> = {
     label_crit_info: "Effektiver Crit-Schaden:",
   },
   en: {
-    tab_label:   "CARDASSIAN",
     armada_info:
       "Cardassian armadas increase their crit chance every round (Uncommon). Rare & Epic have fixed crit but massive crit damage.",
     gaila_label: "GAILA SETUP",

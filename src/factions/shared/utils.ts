@@ -33,19 +33,32 @@ export const COUNTER_SHIP: Record<ShipType, ShipType> = {
 
 export type ShipTypeStatus = "advantage" | "neutral" | "disadvantage";
 
+const ADVANTAGE_FACTOR = 1.3;
+const DISADVANTAGE_FACTOR = 0.75;
+
 export function getShipTypeFactor(myShip: ShipType, armadaType: ShipType): { factor: number; status: ShipTypeStatus } {
   if (myShip === armadaType) return { factor: 1.0, status: "neutral" };
   return BEATS[myShip] === armadaType
-    ? { factor: 1.3, status: "advantage" }
-    : { factor: 0.75, status: "disadvantage" };
+    ? { factor: ADVANTAGE_FACTOR, status: "advantage" }
+    : { factor: DISADVANTAGE_FACTOR, status: "disadvantage" };
 }
 
-export function fmtPower(value: number): string {
-  return value.toLocaleString("de-DE");
+export function fmtPower(value: number, lang: string): string {
+  return value.toLocaleString(lang);
 }
 
 export function parsePower(text: string): number {
-  const num = parseInt(text.replace(/[.,\s]/g, ""), 10);
-  if (isNaN(num) || num <= 0) throw new Error("invalid");
-  return num;
+  let cleaned = text.replace(/\s/g, "");
+
+  // Remove thousand separators: dot before 3 digits followed by dot or end (DE)
+  cleaned = cleaned.replace(/\.(?=\d{3}(\.|$))/g, "");
+  // Remove thousand separators: comma before 3 digits followed by comma or end (EN)
+  cleaned = cleaned.replace(/,(?=\d{3}(,|$))/g, "");
+
+  // Replace remaining comma with dot (DE decimal comma)
+  cleaned = cleaned.replace(/,/g, ".");
+
+  const num = parseFloat(cleaned);
+  if (!isFinite(num) || num <= 0) throw new Error("invalid");
+  return Math.round(num);
 }

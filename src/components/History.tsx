@@ -1,17 +1,18 @@
 import { useState } from "react";
 import Card from "./Card";
 import { fmtPower } from "../factions/shared/utils";
-import type { SaveEntry } from "../factions/shared/types";
+import type { SaveEntry, Lang } from "../factions/shared/types";
 import type { Translation } from "../languages";
 
 interface Props {
+  lang:       Lang;
   t:          Translation;
   saves:      SaveEntry[];
   onDelete:   (index: number) => void;
   onClearAll: () => void;
 }
 
-export default function History({ t, saves, onDelete, onClearAll }: Props) {
+export default function History({ lang, t, saves, onDelete, onClearAll }: Props) {
   const [selected, setSelected]   = useState<number | null>(null);
   const [confirming, setConfirming] = useState(false);
 
@@ -38,7 +39,7 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
       (e) => `${e.date};${e.faction};${e.power};${e.label};${e.result}`
     );
     const csv = [t.saves_cols.join(";"), ...rows].join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement("a");
     a.href = url;
@@ -71,9 +72,9 @@ export default function History({ t, saves, onDelete, onClearAll }: Props) {
                 >
                   <td>{e.date}</td>
                   <td style={{ color: `var(--${e.faction.toLowerCase()})` }}>{e.faction}</td>
-                  <td>{fmtPower(e.power)}</td>
+                  <td>{fmtPower(e.power, lang)}</td>
                   <td style={{ color: "var(--label)", fontSize: "10px" }}>{e.label}</td>
-                  <td>{fmtPower(e.result)}</td>
+                  <td>{fmtPower(e.result, lang)}</td>
                 </tr>
               ))
             )}

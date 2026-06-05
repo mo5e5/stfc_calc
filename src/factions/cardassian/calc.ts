@@ -41,12 +41,6 @@ const BASE_CRIT_CHANCE: Record<Difficulty, number> = {
   Epic:     20,
 };
 
-export function roundsUntilMaxCrit(difficulty: Difficulty): number {
-  if (difficulty !== "Uncommon") return Infinity;
-  // Starts at 20%, +10%/round → reaches 100% after 8 rounds
-  return 8;
-}
-
 export function critChanceAtRound(round: number): number {
   // Uncommon only — clamped to 100
   return Math.min(100, BASE_CRIT_CHANCE.Uncommon + round * 10);
@@ -68,7 +62,7 @@ export function calculateCardassian(
   const effectiveCritDamage = Math.max(0, CRIT_DAMAGE[difficulty] - gailaReduction);
 
   // Crit damage factor: higher armada crit damage = harder = lower multiplier
-  // 250% crit → factor 1.0 baseline; each 100% extra = ~0.1 reduction
+  // 250% crit → factor 1.0 baseline; each 100% extra = ~0.04 reduction
   const critPenalty = 1 - (effectiveCritDamage - 250) / 2500;
 
   const maxArmadaPower = Math.round(power * b * c * r * Math.max(0.6, critPenalty));

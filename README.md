@@ -79,7 +79,7 @@ High-mitigation targets. Borg crew synergy is essential for MegaCubes.
 | -------- | --------------------------------------------------------------- |
 | Sphere   | Manageable with good crew and mitigation                        |
 | Cube     | Requires coordination — best crew on the lead ship              |
-| MegaCube | Full Borg synergy (Nine/Seven/Five of Eleven) → enemy crits = 0 |
+| MegaCube | Full Borg synergy (Nine/Seven/Eight of Eleven) → enemy crits = 0 |
 
 ---
 

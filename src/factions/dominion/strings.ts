@@ -1,7 +1,6 @@
 import type { Lang } from "../shared/types";
 
 export interface DominionStrings {
-  tab_label:      string;
   armada_info:    string;
   ship_label:     (n: number) => string;
   ship_power_placeholder: string;
@@ -15,7 +14,6 @@ export interface DominionStrings {
 
 export const strings: Record<Lang, DominionStrings> = {
   de: {
-    tab_label:   "DOMINION",
     armada_info:
       "Dominion Solo-Armadas: Du kämpfst alleine mit 3 eigenen Schiffen. Jedes Schiff hat seine eigene Crew. Kein Allianz-Bonus.",
     ship_label:  (n) => `SCHIFF ${n}`,
@@ -28,7 +26,6 @@ export const strings: Record<Lang, DominionStrings> = {
     label_total: "Kombinierte Stärke:",
   },
   en: {
-    tab_label:   "DOMINION",
     armada_info:
       "Dominion Solo Armadas: You fight alone with 3 of your own ships. Each ship has its own crew. No alliance bonus.",
     ship_label:  (n) => `SHIP ${n}`,

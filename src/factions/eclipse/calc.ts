@@ -16,6 +16,22 @@ const SPOCK_SHIELD_REGEN: Record<SpockTier, number> = {
   beverly: 200,
 };
 
+const SPOCK_FACTOR: Record<SpockTier, number> = {
+  0: 0.80,
+  3: 0.95,
+  beverly: 1.10,
+  4: 1.15,
+  5: 1.30,
+};
+
+const SURVIVABILITY: Record<SpockTier, "low" | "medium" | "high"> = {
+  0: "low",
+  3: "low",
+  beverly: "medium",
+  4: "medium",
+  5: "high",
+};
+
 // Hull Breach: flat +50% crit damage after all other bonuses (Stella crew)
 export type HullBreachKey = "yes" | "no";
 
@@ -47,24 +63,11 @@ export function calculateEclipse(
   const hb = hullBreach === "yes";
 
   const armadaLevelFactor = 2 ** (armadaLevel - 1);
-  const spockFactor =
-    spockTier === 5
-      ? 1.30
-      : spockTier === 4
-        ? 1.15
-        : spockTier === "beverly"
-          ? 1.10
-          : spockTier === 3
-            ? 0.95
-            : 0.80;
+  const spockFactor = SPOCK_FACTOR[spockTier] ?? 0.80;
   const hullFactor = hb ? 1.15 : 1.0;
 
   const survivability: EclipseResult["survivability"] =
-    spockTier === 5
-      ? "high"
-      : spockTier === 4 || spockTier === "beverly"
-        ? "medium"
-        : "low";
+    SURVIVABILITY[spockTier] ?? "low";
 
   // Actual HP regen per round: spockPct/100 × defenseStat (Spock only; Beverly uses crew health, different stat)
   const actualShieldRegenHp =

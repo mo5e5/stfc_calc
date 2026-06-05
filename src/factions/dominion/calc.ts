@@ -14,7 +14,7 @@ export interface DominionResult {
   ship3:          number;
   difficulty:     number;
   research:       number;
-  defiantly:      boolean;
+  hasDefiant:      boolean;
 }
 
 export function calculateDominion(
@@ -28,7 +28,7 @@ export function calculateDominion(
   const r  = RESEARCH_FACTORS[research];
   const b  = DIFFICULTY_FACTORS[difficulty];
   // Defiant bonus: unique Edict Reward boosts total effective power
-  const defiantly = hasDefiant ? 1.15 : 1.0;
+  const defiantMultiplier = hasDefiant ? 1.15 : 1.0;
 
   const s1 = Math.round(ship1.power * CREW_FACTORS[ship1.crew]);
   const s2 = Math.round(ship2.power * CREW_FACTORS[ship2.crew]);
@@ -36,13 +36,13 @@ export function calculateDominion(
   const totalPower = s1 + s2 + s3;
 
   return {
-    maxArmadaPower: Math.round(totalPower * b * r * defiantly),
+    maxArmadaPower: Math.round(totalPower * b * r * defiantMultiplier),
     totalPower,
     ship1: s1,
     ship2: s2,
     ship3: s3,
     difficulty: b,
     research:   r,
-    defiantly:  hasDefiant,
+    hasDefiant,
   };
 }

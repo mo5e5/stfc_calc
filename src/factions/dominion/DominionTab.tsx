@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import ResearchSelect from "../shared/components/ResearchSelect";
+import DifficultySelect from "../shared/components/DifficultySelect";
+import ResultCard from "../shared/components/ResultCard";
+import ActionButtons from "../shared/components/ActionButtons";
 import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateDominion } from "./calc";
 import type { ShipSetup } from "./calc";
 import { strings } from "./strings";
-import { DIFFICULTY_FACTORS, CREW_FACTORS, RESEARCH_FACTORS, fmtPower, parsePower } from "../shared/utils";
+import { CREW_FACTORS, fmtPower, parsePower } from "../shared/utils";
 import type { Difficulty, CrewKey, ResKey, Lang, SaveEntry } from "../shared/types";
 import type { Translation } from "../../languages";
 
@@ -91,15 +95,7 @@ export default function DominionTab({ lang, t, onSave }: Props) {
   return (
     <div className="calc-layout">
       <div className="calc-left">
-        <Card title={t.difficulty_title}>
-          <p className="info-text">{s.armada_info}</p>
-          <label className="field-label">{t.difficulty_label}</label>
-          <select className="select-input" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
-            {(Object.keys(DIFFICULTY_FACTORS) as Difficulty[]).map((k) => (
-              <option key={k} value={k}>{t.difficulty_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <DifficultySelect value={difficulty} onChange={setDifficulty} t={t} infoText={s.armada_info} />
 
         <ShipCard n={1} sh={ship1} />
         <ShipCard n={2} sh={ship2} />
@@ -118,47 +114,30 @@ export default function DominionTab({ lang, t, onSave }: Props) {
           </label>
         </Card>
 
-        <Card title={t.res_title}>
-          <p className="info-text">{t.res_info}</p>
-          <label className="field-label">{t.res_label}</label>
-          <select className="select-input" value={research} onChange={(e) => setResearch(e.target.value as ResKey)}>
-            {(Object.keys(RESEARCH_FACTORS) as ResKey[]).map((k) => (
-              <option key={k} value={k}>{t.res_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <ResearchSelect value={research} onChange={setResearch} t={t} />
       </div>
 
       <div className="calc-right">
-        <Card title={t.result_title}>
-          <p className="result-label">{t.result_label}</p>
-          <p className="result-value" style={{ color: result ? "var(--dominion)" : "var(--bright)" }}>
-            {result ? fmtPower(result.maxArmadaPower) : "–"}
-          </p>
+        <ResultCard result={result?.maxArmadaPower ?? null} fmtPower={fmtPower} lang={lang} t={t} resultColor={result ? "var(--dominion)" : "var(--bright)"}>
           <div className="divider" />
           <pre className="formula-text">
             {result
               ? [
-                  `${s.label_total}  ${fmtPower(result.totalPower)}`,
-                  `  Schiff 1:  ${fmtPower(result.ship1)}`,
-                  `  Schiff 2:  ${fmtPower(result.ship2)}`,
-                  `  Schiff 3:  ${fmtPower(result.ship3)}`,
+                  `${s.label_total}  ${fmtPower(result.totalPower, lang)}`,
+                  `  Schiff 1:  ${fmtPower(result.ship1, lang)}`,
+                  `  Schiff 2:  ${fmtPower(result.ship2, lang)}`,
+                  `  Schiff 3:  ${fmtPower(result.ship3, lang)}`,
                   "",
                   `× ${result.difficulty}  (${difficulty})`,
                   `× ${result.research}  (${research})`,
                   `× ${hasDefiant ? "1.15" : "1.0"}  (Defiant)`,
-                  `= ${fmtPower(result.maxArmadaPower)}`,
+                  `= ${fmtPower(result.maxArmadaPower, lang)}`,
                 ].join("\n")
               : t.result_start}
           </pre>
-        </Card>
+        </ResultCard>
 
-        <div className="btn-row">
-          <button className={`stfc-btn${justSaved ? " saved" : ""}`} onClick={handleSave} disabled={!result}>
-            {justSaved ? t.msg_saved : t.btn_calc}
-          </button>
-          <button className="stfc-btn" onClick={handleClear}>{t.btn_clear}</button>
-        </div>
+        <ActionButtons onSave={handleSave} onClear={handleClear} justSaved={justSaved} disabled={!result} t={t} />
 
         <Card title={t.tips_title}>
           <p className="info-text" style={{ whiteSpace: "pre-line" }}>{tips}</p>

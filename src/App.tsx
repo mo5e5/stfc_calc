@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ComponentType } from "react";
 import History from "./components/History";
 import FederationTab  from "./factions/federation/FederationTab";
 import KlingonTab     from "./factions/klingon/KlingonTab";
@@ -7,14 +7,36 @@ import CardassianTab  from "./factions/cardassian/CardassianTab";
 import BorgTab        from "./factions/borg/BorgTab";
 import DominionTab    from "./factions/dominion/DominionTab";
 import EclipseTab     from "./factions/eclipse/EclipseTab";
-import { LANGS } from "./languages";
+import { LANGS, type Translation } from "./languages";
 import type { Theme, Lang, SaveEntry } from "./factions/shared/types";
 import "./App.css";
+
+const VALID_THEMES: Theme[] = ["dark", "light"];
+const VALID_LANGS: Lang[]   = ["de", "en"];
+
+function isTheme(v: string): v is Theme { return VALID_THEMES.includes(v as Theme); }
+function isLang(v: string): v is Lang   { return VALID_LANGS.includes(v as Lang);   }
 
 type OuterTab  = "calc" | "saves";
 type FactionTab = "Federation" | "Klingon" | "Romulan" | "Cardassian" | "Borg" | "Dominion" | "Eclipse";
 
 const FACTION_TABS: FactionTab[] = ["Federation", "Klingon", "Romulan", "Cardassian", "Borg", "Dominion", "Eclipse"];
+
+type FactionTabProps = {
+  lang: Lang;
+  t: Translation;
+  onSave: (entry: SaveEntry) => void;
+};
+
+const FACTION_COMPONENTS: Record<FactionTab, ComponentType<FactionTabProps>> = {
+  Federation: FederationTab,
+  Klingon: KlingonTab,
+  Romulan: RomulanTab,
+  Cardassian: CardassianTab,
+  Borg: BorgTab,
+  Dominion: DominionTab,
+  Eclipse: EclipseTab,
+};
 
 function migrateEntry(raw: unknown): SaveEntry {
   const r = raw as Record<string, unknown>;
@@ -29,13 +51,23 @@ function migrateEntry(raw: unknown): SaveEntry {
 }
 
 export default function App() {
-  const [theme, setTheme]           = useState<Theme>(() => (localStorage.getItem("theme") as Theme) ?? "dark");
-  const [lang, setLang]             = useState<Lang>(() => (localStorage.getItem("lang") as Lang) ?? "de");
+  const [theme, setTheme] = useState<Theme>(() => {
+    const raw = localStorage.getItem("theme");
+    return raw && isTheme(raw) ? raw : "dark";
+  });
+  const [lang, setLang] = useState<Lang>(() => {
+    const raw = localStorage.getItem("lang");
+    return raw && isLang(raw) ? raw : "de";
+  });
   const [outerTab, setOuterTab]     = useState<OuterTab>("calc");
   const [factionTab, setFactionTab] = useState<FactionTab>("Federation");
   const [saves, setSaves]           = useState<SaveEntry[]>(() => {
-    const raw = JSON.parse(localStorage.getItem("saves") ?? "[]");
-    return (raw as unknown[]).map(migrateEntry);
+      try {
+        const raw = JSON.parse(localStorage.getItem("saves") ?? "[]");
+        return (raw as unknown[]).map(migrateEntry);
+      } catch {
+        return [];
+      }
   });
 
   const t = LANGS[lang];
@@ -44,24 +76,28 @@ export default function App() {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   function changeTheme(v: Theme) { setTheme(v); localStorage.setItem("theme", v); }
   function changeLang(v: Lang)   { setLang(v);  localStorage.setItem("lang", v);  }
 
   function addSave(entry: SaveEntry) {
     const updated = [...saves, entry];
     setSaves(updated);
-    localStorage.setItem("saves", JSON.stringify(updated));
+    try { localStorage.setItem("saves", JSON.stringify(updated)); } catch { /* quota */ }
   }
 
   function deleteSave(i: number) {
     const updated = saves.filter((_, idx) => idx !== i);
     setSaves(updated);
-    localStorage.setItem("saves", JSON.stringify(updated));
+    try { localStorage.setItem("saves", JSON.stringify(updated)); } catch { /* quota */ }
   }
 
   function clearSaves() {
     setSaves([]);
-    localStorage.setItem("saves", "[]");
+    try { localStorage.setItem("saves", "[]"); } catch { /* quota */ }
   }
 
   return (
@@ -111,29 +147,12 @@ export default function App() {
       {/* Content */}
       <div className="tab-content">
         {outerTab === "saves" && (
-          <History t={t} saves={saves} onDelete={deleteSave} onClearAll={clearSaves} />
+          <History lang={lang} t={t} saves={saves} onDelete={deleteSave} onClearAll={clearSaves} />
         )}
-        {outerTab === "calc" && factionTab === "Federation" && (
-          <FederationTab lang={lang} t={t} onSave={addSave} />
-        )}
-        {outerTab === "calc" && factionTab === "Klingon" && (
-          <KlingonTab lang={lang} t={t} onSave={addSave} />
-        )}
-        {outerTab === "calc" && factionTab === "Romulan" && (
-          <RomulanTab lang={lang} t={t} onSave={addSave} />
-        )}
-        {outerTab === "calc" && factionTab === "Cardassian" && (
-          <CardassianTab lang={lang} t={t} onSave={addSave} />
-        )}
-        {outerTab === "calc" && factionTab === "Borg" && (
-          <BorgTab lang={lang} t={t} onSave={addSave} />
-        )}
-        {outerTab === "calc" && factionTab === "Dominion" && (
-          <DominionTab lang={lang} t={t} onSave={addSave} />
-        )}
-        {outerTab === "calc" && factionTab === "Eclipse" && (
-          <EclipseTab lang={lang} t={t} onSave={addSave} />
-        )}
+        {outerTab === "calc" && (() => {
+          const Component = FACTION_COMPONENTS[factionTab];
+          return <Component lang={lang} t={t} onSave={addSave} />;
+        })()}
       </div>
     </div>
   );

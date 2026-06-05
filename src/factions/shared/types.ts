@@ -26,11 +26,9 @@ export interface SaveEntry {
 export interface StandardFactionConfig {
   key:         FactionKey;
   armadaType:  ShipType;
-  cssVar:      string;
 }
 
 export interface FactionStrings {
-  tab_label:        string;
   armada_info:      string;
   counter_tip:      string;
   disadvantage_warn: string;

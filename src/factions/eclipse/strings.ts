@@ -2,7 +2,6 @@ import type { Lang } from "../shared/types";
 import type { SpockTier, HullBreachKey } from "./calc";
 
 export interface EclipseStrings {
-  tab_label: string;
   armada_info: string;
   armada_level_label: string;
   armada_level_info: string;
@@ -26,7 +25,6 @@ export interface EclipseStrings {
 
 export const strings: Record<Lang, EclipseStrings> = {
   de: {
-    tab_label: "ECLIPSE",
     armada_info:
       "Eclipse-Armadas sind sehr langwierig — Shield-Regeneration ist entscheidend. Spock (mit Kelvin-Kirk) regeneriert Schilde jede Runde.",
     armada_level_label: "ARMADA-LEVEL",
@@ -67,7 +65,6 @@ export const strings: Record<Lang, EclipseStrings> = {
     label_regen_hp: "Regen HP/Runde:",
   },
   en: {
-    tab_label: "ECLIPSE",
     armada_info:
       "Eclipse armadas are very long fights — shield regeneration is critical. Spock (with Kelvin Kirk) regenerates shields each round.",
     armada_level_label: "ARMADA LEVEL",

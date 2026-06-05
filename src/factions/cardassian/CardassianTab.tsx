@@ -1,10 +1,15 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import CrewSelect from "../shared/components/CrewSelect";
+import ResearchSelect from "../shared/components/ResearchSelect";
+import DifficultySelect from "../shared/components/DifficultySelect";
+import ResultCard from "../shared/components/ResultCard";
+import ActionButtons from "../shared/components/ActionButtons";
 import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateCardassian, critChanceAtRound, GAILA_REDUCTION } from "./calc";
 import type { GailaKey } from "./calc";
 import { strings } from "./strings";
-import { DIFFICULTY_FACTORS, CREW_FACTORS, RESEARCH_FACTORS, fmtPower, parsePower } from "../shared/utils";
+import { DIFFICULTY_FACTORS, fmtPower, parsePower } from "../shared/utils";
 import type { Difficulty, CrewKey, ResKey, Lang, SaveEntry } from "../shared/types";
 import type { Translation } from "../../languages";
 
@@ -76,15 +81,7 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
           />
         </Card>
 
-        <Card title={t.difficulty_title}>
-          <p className="info-text">{s.armada_info}</p>
-          <label className="field-label">{t.difficulty_label}</label>
-          <select className="select-input" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
-            {(Object.keys(DIFFICULTY_FACTORS) as Difficulty[]).map((k) => (
-              <option key={k} value={k}>{t.difficulty_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <DifficultySelect value={difficulty} onChange={setDifficulty} t={t} infoText={s.armada_info} />
 
         <Card title={s.gaila_label}>
           <p className="info-text">{s.gaila_info}</p>
@@ -96,39 +93,19 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
           </select>
         </Card>
 
-        <Card title={t.crew_title}>
-          <p className="info-text">{t.crew_info}</p>
-          <label className="field-label">{t.crew_label}</label>
-          <select className="select-input" value={crew} onChange={(e) => setCrew(e.target.value as CrewKey)}>
-            {(Object.keys(CREW_FACTORS) as CrewKey[]).map((k) => (
-              <option key={k} value={k}>{t.crew_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <CrewSelect value={crew} onChange={setCrew} t={t} />
 
-        <Card title={t.res_title}>
-          <p className="info-text">{t.res_info}</p>
-          <label className="field-label">{t.res_label}</label>
-          <select className="select-input" value={research} onChange={(e) => setResearch(e.target.value as ResKey)}>
-            {(Object.keys(RESEARCH_FACTORS) as ResKey[]).map((k) => (
-              <option key={k} value={k}>{t.res_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <ResearchSelect value={research} onChange={setResearch} t={t} />
       </div>
 
       <div className="calc-right">
-        <Card title={t.result_title}>
-          <p className="result-label">{t.result_label}</p>
-          <p className="result-value" style={{ color: result ? "var(--cardassian)" : "var(--bright)" }}>
-            {result ? fmtPower(result.maxArmadaPower) : "–"}
-          </p>
+        <ResultCard result={result?.maxArmadaPower ?? null} fmtPower={fmtPower} lang={lang} t={t} resultColor={result ? "var(--cardassian)" : "var(--bright)"}>
           <div className="divider" />
           <pre className="formula-text">
             {result && power
               ? [
-                  `${fmtPower(power)}  ×  ${DIFFICULTY_FACTORS[difficulty]}  ×  ${result.crew}  ×  ${result.research}`,
-                  `= ${fmtPower(result.maxArmadaPower)}`,
+                  `${fmtPower(power, lang)}  ×  ${DIFFICULTY_FACTORS[difficulty]}  ×  ${result.crew}  ×  ${result.research}`,
+                  `= ${fmtPower(result.maxArmadaPower, lang)}`,
                   "",
                   `${s.label_crit_info}  ${result.critDamage}%`,
                   difficulty === "Uncommon"
@@ -137,14 +114,9 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
                 ].join("\n")
               : t.result_start}
           </pre>
-        </Card>
+        </ResultCard>
 
-        <div className="btn-row">
-          <button className={`stfc-btn${justSaved ? " saved" : ""}`} onClick={handleSave} disabled={!result}>
-            {justSaved ? t.msg_saved : t.btn_calc}
-          </button>
-          <button className="stfc-btn" onClick={handleClear}>{t.btn_clear}</button>
-        </div>
+        <ActionButtons onSave={handleSave} onClear={handleClear} justSaved={justSaved} disabled={!result} t={t} />
 
         <Card title={t.tips_title}>
           <p className="info-text" style={{ whiteSpace: "pre-line" }}>{tips}</p>

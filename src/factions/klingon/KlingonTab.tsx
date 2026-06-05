@@ -11,5 +11,5 @@ interface Props {
 }
 
 export default function KlingonTab({ lang, t, onSave }: Props) {
-  return <StandardFactionCalc config={config} strings={strings[lang]} t={t} onSave={onSave} />;
+  return <StandardFactionCalc config={config} strings={strings[lang]} lang={lang} t={t} onSave={onSave} />;
 }

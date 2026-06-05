@@ -63,7 +63,7 @@ body {
   color: var(--bright);
   height: 100vh;
   overflow: hidden;
-  user-select: none;
+  user-select: auto;
 }
 
 /* ── App shell ───────────────────────────────────────────── */

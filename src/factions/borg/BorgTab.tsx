@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Card from "../../components/Card";
+import CrewSelect from "../shared/components/CrewSelect";
+import ResearchSelect from "../shared/components/ResearchSelect";
+import ResultCard from "../shared/components/ResultCard";
+import ActionButtons from "../shared/components/ActionButtons";
 import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateBorg } from "./calc";
 import type { BorgTarget, BorgCrewKey } from "./calc";
 import { strings } from "./strings";
-import { CREW_FACTORS, RESEARCH_FACTORS, fmtPower, parsePower } from "../shared/utils";
+import { fmtPower, parsePower } from "../shared/utils";
 import type { CrewKey, ResKey, Lang, SaveEntry } from "../shared/types";
 import type { Translation } from "../../languages";
 
@@ -79,7 +83,7 @@ export default function BorgTab({ lang, t, onSave }: Props) {
           />
         </Card>
 
-        <Card title="BORG-ZIEL">
+        <Card title={s.target_title}>
           <p className="info-text">{s.armada_info}</p>
           <label className="field-label">{s.target_label}</label>
           <select className="select-input" value={target} onChange={(e) => setTarget(e.target.value as BorgTarget)}>
@@ -99,47 +103,22 @@ export default function BorgTab({ lang, t, onSave }: Props) {
           </select>
         </Card>
 
-        <Card title={t.crew_title}>
-          <p className="info-text">{t.crew_info}</p>
-          <label className="field-label">{t.crew_label}</label>
-          <select className="select-input" value={crew} onChange={(e) => setCrew(e.target.value as CrewKey)}>
-            {(Object.keys(CREW_FACTORS) as CrewKey[]).map((k) => (
-              <option key={k} value={k}>{t.crew_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <CrewSelect value={crew} onChange={setCrew} t={t} />
 
-        <Card title={t.res_title}>
-          <p className="info-text">{t.res_info}</p>
-          <label className="field-label">{t.res_label}</label>
-          <select className="select-input" value={research} onChange={(e) => setResearch(e.target.value as ResKey)}>
-            {(Object.keys(RESEARCH_FACTORS) as ResKey[]).map((k) => (
-              <option key={k} value={k}>{t.res_options[k]}</option>
-            ))}
-          </select>
-        </Card>
+        <ResearchSelect value={research} onChange={setResearch} t={t} />
       </div>
 
       <div className="calc-right">
-        <Card title={t.result_title}>
-          <p className="result-label">{t.result_label}</p>
-          <p className="result-value" style={{ color: result ? "var(--borg)" : "var(--bright)" }}>
-            {result ? fmtPower(result.maxArmadaPower) : "–"}
-          </p>
+        <ResultCard result={result?.maxArmadaPower ?? null} fmtPower={fmtPower} lang={lang} t={t} resultColor={result ? "var(--borg)" : "var(--bright)"}>
           <div className="divider" />
           <pre className="formula-text">
             {result && power
-              ? `${fmtPower(power)}  ×  Mitigation  ×  ${result.borgCrew}  ×  ${result.crew}  ×  ${result.research}\n= ${fmtPower(result.maxArmadaPower)}\n\nZiel:         ${target}\nBorg-Crew:    × ${result.borgCrew}\nCrew:         × ${result.crew}\nForschung:    × ${result.research}`
+              ? `${fmtPower(power, lang)}  ×  Mitigation  ×  ${result.borgCrew}  ×  ${result.crew}  ×  ${result.research}\n= ${fmtPower(result.maxArmadaPower, lang)}\n\nZiel:         ${target}\nBorg-Crew:    × ${result.borgCrew}\nCrew:         × ${result.crew}\nForschung:    × ${result.research}`
               : t.result_start}
           </pre>
-        </Card>
+        </ResultCard>
 
-        <div className="btn-row">
-          <button className={`stfc-btn${justSaved ? " saved" : ""}`} onClick={handleSave} disabled={!result}>
-            {justSaved ? t.msg_saved : t.btn_calc}
-          </button>
-          <button className="stfc-btn" onClick={handleClear}>{t.btn_clear}</button>
-        </div>
+        <ActionButtons onSave={handleSave} onClear={handleClear} justSaved={justSaved} disabled={!result} t={t} />
 
         <Card title={t.tips_title}>
           <p className="info-text" style={{ whiteSpace: "pre-line" }}>{tips}</p>
