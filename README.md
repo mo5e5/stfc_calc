@@ -199,6 +199,14 @@ If in-game mechanics change with a game update, please open an issue with detail
 
 ---
 
+## License
+
+Copyright (C) 2026 mo5e5
+
+Licensed under the **GNU General Public License v3.0 or later** — see [LICENSE](LICENSE) for the full text. You may use, modify, and redistribute this software; derivative works must remain under the GPL.
+
+---
+
 <div align="center">
 <sub>Community tool — not affiliated with Scopely or CBS Studios.</sub>
 </div>

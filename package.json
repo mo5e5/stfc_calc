@@ -2,6 +2,7 @@
   "name": "stfc_calc_tauri",
   "private": true,
   "version": "1.0.3",
+  "license": "GPL-3.0-or-later",
   "type": "module",
   "scripts": {
     "dev": "vite",
