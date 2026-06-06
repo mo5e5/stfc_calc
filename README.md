@@ -208,5 +208,5 @@ Licensed under the **GNU General Public License v3.0 or later** — see [LICENSE
 ---
 
 <div align="center">
-<sub>Community tool — not affiliated with Scopely or CBS Studios.</sub>
+<sub>Fan project — not endorsed by, sponsored by, or affiliated with CBS, Paramount Pictures, Scopely, or any Star Trek franchise. "Star Trek" and related marks are trademarks of CBS Studios / Paramount. See <a href="https://www.scopely.com/scopely-fan-content-policy">Scopely's Fan Content Policy</a>.</sub>
 </div>
