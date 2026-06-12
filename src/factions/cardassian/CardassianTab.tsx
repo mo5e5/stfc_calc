@@ -9,7 +9,7 @@ import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateCardassian, critChanceAtRound, GAILA_REDUCTION } from "./calc";
 import type { GailaKey } from "./calc";
 import { strings } from "./strings";
-import { DIFFICULTY_FACTORS, fmtPower, parsePower } from "../shared/utils";
+import { DIFFICULTY_FACTORS, fmtPower, deriveResult } from "../shared/utils";
 import type { Difficulty, CrewKey, ResKey, Lang, SaveEntry } from "../shared/types";
 import type { Translation } from "../../languages";
 
@@ -28,15 +28,9 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
   const [research, setResearch]     = useState<ResKey>("High");
   const [gaila, setGaila]           = useState<GailaKey>("GailaSynergy");
 
-  let power:  number | null = null;
-  let result: ReturnType<typeof calculateCardassian> | null = null;
-
-  if (powerInput.trim()) {
-    try {
-      power  = parsePower(powerInput);
-      result = calculateCardassian(power, difficulty, crew, research, gaila);
-    } catch { /* invalid */ }
-  }
+  const { power, result } = deriveResult(powerInput, (p) =>
+    calculateCardassian(p, difficulty, crew, research, gaila),
+  );
 
   const label = `${difficulty} · ${crew} · ${gaila}`;
   const { handleSave, justSaved } = useSaveHandler({
@@ -44,6 +38,7 @@ export default function CardassianTab({ lang, t, onSave }: Props) {
     power,
     resultValue: result?.maxArmadaPower ?? null,
     label,
+    lang,
     onSave,
   });
 

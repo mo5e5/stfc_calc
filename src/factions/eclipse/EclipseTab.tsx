@@ -12,7 +12,7 @@ import { strings } from "./strings";
 import {
   DIFFICULTY_FACTORS,
   fmtPower,
-  parsePower,
+  deriveResult,
 } from "../shared/utils";
 import type {
   Difficulty,
@@ -43,26 +43,18 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
   const [hullBreach, setHullBreach] = useState<HullBreachKey>("yes");
   const [defenseStat, setDefenseStat] = useState(0);
 
-  let power: number | null = null;
-  let result: ReturnType<typeof calculateEclipse> | null = null;
-
-  if (powerInput.trim()) {
-    try {
-      power = parsePower(powerInput);
-      result = calculateEclipse(
-        power,
-        difficulty,
-        crew,
-        research,
-        spockTier,
-        hullBreach,
-        armadaLevel,
-        defenseStat,
-      );
-    } catch {
-      /* invalid */
-    }
-  }
+  const { power, result } = deriveResult(powerInput, (p) =>
+    calculateEclipse(
+      p,
+      difficulty,
+      crew,
+      research,
+      spockTier,
+      hullBreach,
+      armadaLevel,
+      defenseStat,
+    ),
+  );
 
   const tierLabel = spockTier === "beverly" ? "Beverly" : `Spock T${spockTier}`;
   const label = `${difficulty} · Level ${armadaLevel} · ${tierLabel} · ${hullBreach === "yes" ? "Hull Breach" : "No HB"}`;
@@ -71,6 +63,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
     power,
     resultValue: result?.maxArmadaPower ?? null,
     label,
+    lang,
     onSave,
   });
 
@@ -196,7 +189,7 @@ export default function EclipseTab({ lang, t, onSave }: Props) {
                   `${fmtPower(power, lang)}  ×  ${DIFFICULTY_FACTORS[difficulty]}  ×  ${result.crew}  ×  ${result.research}`,
                   `= ${fmtPower(result.maxArmadaPower, lang)}`,
                   "",
-                  `${s.label_shield_regen}  ${result.shieldRegenPct}%${result.actualShieldRegenHp > 0 ? `  (${s.label_regen_hp} ${result.actualShieldRegenHp.toLocaleString("de-DE")})` : ""}`,
+                  `${s.label_shield_regen}  ${result.shieldRegenPct}%${result.actualShieldRegenHp > 0 ? `  (${s.label_regen_hp} ${result.actualShieldRegenHp.toLocaleString(lang)})` : ""}`,
                   `Hull Breach:  ${result.hullBreach ? "+50% Crit (nach Boni)" : "–"}`,
                   `Überlebensdauer:  ${result.survivability}`,
                 ].join("\n")

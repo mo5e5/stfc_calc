@@ -55,6 +55,7 @@ export default function DominionTab({ lang, t, onSave }: Props) {
     power: result?.totalPower ?? null,
     resultValue: result?.maxArmadaPower ?? null,
     label,
+    lang,
     onSave,
   });
 

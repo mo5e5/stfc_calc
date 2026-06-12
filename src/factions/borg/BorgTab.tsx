@@ -8,7 +8,7 @@ import { useSaveHandler } from "../shared/useSaveHandler";
 import { calculateBorg } from "./calc";
 import type { BorgTarget, BorgCrewKey } from "./calc";
 import { strings } from "./strings";
-import { fmtPower, parsePower } from "../shared/utils";
+import { fmtPower, deriveResult } from "../shared/utils";
 import type { CrewKey, ResKey, Lang, SaveEntry } from "../shared/types";
 import type { Translation } from "../../languages";
 
@@ -30,15 +30,9 @@ export default function BorgTab({ lang, t, onSave }: Props) {
   const [crew, setCrew]             = useState<CrewKey>("Optimal");
   const [research, setResearch]     = useState<ResKey>("High");
 
-  let power:  number | null = null;
-  let result: ReturnType<typeof calculateBorg> | null = null;
-
-  if (powerInput.trim()) {
-    try {
-      power  = parsePower(powerInput);
-      result = calculateBorg(power, target, borgCrew, crew, research);
-    } catch { /* invalid */ }
-  }
+  const { power, result } = deriveResult(powerInput, (p) =>
+    calculateBorg(p, target, borgCrew, crew, research),
+  );
 
   const label = `${target} · ${borgCrew} · ${crew}`;
   const { handleSave, justSaved } = useSaveHandler({
@@ -46,6 +40,7 @@ export default function BorgTab({ lang, t, onSave }: Props) {
     power,
     resultValue: result?.maxArmadaPower ?? null,
     label,
+    lang,
     onSave,
   });
 

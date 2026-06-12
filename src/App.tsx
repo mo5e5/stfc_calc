@@ -8,7 +8,7 @@ import BorgTab        from "./factions/borg/BorgTab";
 import DominionTab    from "./factions/dominion/DominionTab";
 import EclipseTab     from "./factions/eclipse/EclipseTab";
 import { LANGS, type Translation } from "./languages";
-import type { Theme, Lang, SaveEntry } from "./factions/shared/types";
+import type { Theme, Lang, SaveEntry, FactionKey } from "./factions/shared/types";
 import "./App.css";
 
 const VALID_THEMES: Theme[] = ["dark", "light"];
@@ -38,15 +38,33 @@ const FACTION_COMPONENTS: Record<FactionTab, ComponentType<FactionTabProps>> = {
   Eclipse: EclipseTab,
 };
 
-function migrateEntry(raw: unknown): SaveEntry {
-  const r = raw as Record<string, unknown>;
-  if (typeof r.faction === "string") return r as unknown as SaveEntry;
+export function migrateEntry(raw: unknown): SaveEntry {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  // Vollständiger, gültiger Eintrag → normalisiert übernehmen
+  if (
+    typeof r.faction === "string" &&
+    typeof r.date === "string" &&
+    typeof r.power === "number" &&
+    typeof r.result === "number" &&
+    typeof r.label === "string"
+  ) {
+    return {
+      date: r.date,
+      faction: r.faction as FactionKey,
+      power: r.power,
+      result: r.result,
+      label: r.label,
+    };
+  }
+  // Legacy-/Teil-Eintrag → mit sicheren Fallbacks coercen
   return {
-    date:    String(r.date ?? ""),
-    faction: "Legacy",
-    power:   Number(r.power ?? 0),
-    result:  Number(r.result ?? 0),
-    label:   [r.armada, r.crew, r.research].filter(Boolean).join(" · ") || "–",
+    date: String(r.date ?? ""),
+    faction: typeof r.faction === "string" ? (r.faction as FactionKey) : "Legacy",
+    power: Number(r.power ?? 0),
+    result: Number(r.result ?? 0),
+    label:
+      [r.armada, r.crew, r.research].filter(Boolean).join(" · ") ||
+      (typeof r.label === "string" ? r.label : "–"),
   };
 }
 

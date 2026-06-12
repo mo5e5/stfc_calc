@@ -43,6 +43,21 @@ export function getShipTypeFactor(myShip: ShipType, armadaType: ShipType): { fac
     : { factor: DISADVANTAGE_FACTOR, status: "disadvantage" };
 }
 
+export function calculateStandardFaction(
+  power: number,
+  difficulty: Difficulty,
+  crew: CrewKey,
+  research: ResKey,
+  shipType: ShipType,
+  armadaType: ShipType,
+): { value: number; b: number; c: number; r: number; s: number; status: ShipTypeStatus } {
+  const b = DIFFICULTY_FACTORS[difficulty];
+  const c = CREW_FACTORS[crew];
+  const r = RESEARCH_FACTORS[research];
+  const { factor: s, status } = getShipTypeFactor(shipType, armadaType);
+  return { value: Math.round(power * b * c * r * s), b, c, r, s, status };
+}
+
 export function fmtPower(value: number, lang: string): string {
   return value.toLocaleString(lang);
 }
@@ -61,4 +76,22 @@ export function parsePower(text: string): number {
   const num = parseFloat(cleaned);
   if (!isFinite(num) || num <= 0) throw new Error("invalid");
   return Math.round(num);
+}
+
+// Derive { power, result } from a raw power input string. Returns nulls for an
+// empty or invalid input. Mirrors the per-tab pattern (power may be set even if
+// `compute` throws). Pure helper — computed during render, no React state.
+export function deriveResult<R>(
+  powerInput: string,
+  compute: (power: number) => R,
+): { power: number | null; result: R | null } {
+  let power: number | null = null;
+  let result: R | null = null;
+  if (powerInput.trim()) {
+    try {
+      power = parsePower(powerInput);
+      result = compute(power);
+    } catch { /* invalid */ }
+  }
+  return { power, result };
 }

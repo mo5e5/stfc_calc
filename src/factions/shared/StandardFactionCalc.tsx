@@ -7,11 +7,8 @@ import ResultCard from "./components/ResultCard";
 import ActionButtons from "./components/ActionButtons";
 import { useSaveHandler } from "./useSaveHandler";
 import {
-  DIFFICULTY_FACTORS,
-  CREW_FACTORS,
-  RESEARCH_FACTORS,
   COUNTER_SHIP,
-  getShipTypeFactor,
+  calculateStandardFaction,
   fmtPower,
   parsePower,
 } from "./utils";
@@ -40,11 +37,7 @@ export default function StandardFactionCalc({ config, strings, lang, t, onSave }
   if (powerInput.trim()) {
     try {
       power = parsePower(powerInput);
-      const b = DIFFICULTY_FACTORS[difficulty];
-      const c = CREW_FACTORS[crew];
-      const r = RESEARCH_FACTORS[research];
-      const { factor: s, status } = getShipTypeFactor(shipType, config.armadaType);
-      result = { value: Math.round(power * b * c * r * s), b, c, r, s, status };
+      result = calculateStandardFaction(power, difficulty, crew, research, shipType, config.armadaType);
     } catch { /* ungültige Eingabe */ }
   }
 
@@ -54,6 +47,7 @@ export default function StandardFactionCalc({ config, strings, lang, t, onSave }
     power,
     resultValue: result?.value ?? null,
     label,
+    lang,
     onSave,
   });
 
